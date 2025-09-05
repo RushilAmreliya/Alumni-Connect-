@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Connect Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a4d8c;
+            --secondary: #ff6b35;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            padding-top: 80px;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar .form-control {
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #e55a2b;
+            border-color: #e55a2b;
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(26, 77, 140, 0.85), rgba(26, 77, 140, 0.95)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            position: relative;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .alumni-card .social-links a {
+            color: var(--primary);
+            margin-right: 15px;
+            font-size: 1.2rem;
+            transition: color 0.2s ease;
+        }
+        
+        .alumni-card .social-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .privacy-controls, .branch-filter {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stats-section .col-md-3 {
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-section .col-md-3:hover {
+            transform: scale(1.05);
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .login-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .form-check-input:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25);
+        }
+        
+        .event-date {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .event-card:hover .event-date {
+            background-color: var(--secondary);
+        }
+        
+        /* Authentication Pages */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #2c6cb0 100%);
+            padding: 20px;
+        }
+        
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .auth-header {
+            background: var(--primary);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .auth-body {
+            background: white;
+            padding: 30px;
+        }
+        
+        .auth-footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        
+        .auth-switch {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Profile Page */
+        .profile-header {
+            background: linear-gradient(to right, var(--primary), #2c6cb0);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+        }
+        
+        .profile-stats {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Privacy Page */
+        .privacy-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Dashboard */
+        .dashboard-card {
+            height: 100%;
+        }
+        
+        .dashboard-stat {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        /* Notifications */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+            
+            .hero-section {
+                padding: 3rem 0;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .navbar .search-container {
+                margin-top: 1rem;
+                width: 100%;
+            }
+            
+            .event-date {
+                margin-bottom: 1rem;
+            }
+            
+            .stats-number {
+                font-size: 2rem;
+            }
+            
+            .profile-avatar {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        
+        /* Animation for filter changes */
+        .alumni-item {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        /* Loading animation */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: var(--primary);
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background-color: #e55a2b;
+            color: white;
+        }
+        
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .toast {
+            background: white;
+            border-left: 4px solid var(--success);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s forwards;
+        }
+        
+        .toast.error {
+            border-left-color: #dc3545;
+        }
+        
+        .toast.warning {
+            border-left-color: var(--warning);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://via.placeholder.com/40x40/1a4d8c/ffffff?text=A" alt="Logo" class="me-2">
+                Alumni Connect
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#" data-page="home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-page="directory">Alumni Directory</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-page="events">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-page="opportunities">Opportunities</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" data-page="about">About</a></li>
+                </ul>
+                
+                <div class="navbar-nav ms-auto">
+                    <div class="search-container position-relative me-3 d-none d-md-block">
+                        <input type="text" class="form-control" placeholder="Search alumni..." id="navbarSearch">
+                    </div>
+                    
+                    <div class="d-flex" id="authButtons">
+                        <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                        <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+                    </div>
+                    
+                    <div class="d-flex align-items-center d-none" id="userMenu">
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://via.placeholder.com/32x32/1a4d8c/ffffff?text=U" alt="User" width="32" height="32" class="rounded-circle me-2">
+                                <span id="username">User</span>
+                                <span class="position-relative ms-2">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="notification-badge">3</span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdownUser">
+                                <li><a class="dropdown-item" href="#" data-page="profile">Profile</a></li>
+                                <li><a class="dropdown-item" href="#" data-page="dashboard">Dashboard</a></li>
+                                <li><a class="dropdown-item" href="#" data-page="privacy">Privacy Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logoutBtn">Sign out</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <!-- Page Content -->
+    <div id="pageContent">
+        <!-- Home Page -->
+        <div class="page" id="home-page">
+            <!-- Hero Section -->
+            <section class="hero-section text-center">
+                <div class="container">
+                    <h1 class="display-4 fw-bold mb-3">Alumni Network</h1>
+                    <p class="lead mb-4">Connecting past, present and future graduates from institutions worldwide</p>
+                    <button class="btn btn-primary btn-lg mt-3">Explore Alumni Directory</button>
+                </div>
+            </section>
+
+            <!-- Mobile Search (hidden on larger screens) -->
+            <div class="container my-3 d-block d-md-none">
+                <div class="position-relative">
+                    <input type="text" class="form-control" placeholder="Search alumni..." id="mobileSearch">
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <section class="py-5 stats-section">
+                <div class="container">
+                    <div class="row text-center">
+                        <div class="col-md-3 col-6 mb-4">
+                            <div class="stats-number" id="alumniCount">1500+</div>
+                            <div class="text-muted">Registered Alumni</div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4">
+                            <div class="stats-number">12</div>
+                            <div class="text-muted">Events This Year</div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4">
+                            <div class="stats-number">45+</div>
+                            <div class="text-muted">Job Opportunities</div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-4">
+                            <div class="stats-number">5</div>
+                            <div class="text-muted">Active Branches</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <div class="container my-5">
+                <div class="row">
+                    <!-- Left Sidebar -->
+                    <div class="col-lg-3">
+                        <div class="branch-filter mb-4">
+                            <h5>Filter by Branch</h5>
+                            <div class="form-check">
+                                <input class="form-check-input branch-filter-option" type="checkbox" id="civilCheck" value="civil" checked>
+                                <label class="form-check-label" for="civilCheck">Civil Engineering</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input branch-filter-option" type="checkbox" id="cseCheck" value="cse" checked>
+                                <label class="form-check-label" for="cseCheck">Computer Science & Engineering</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input branch-filter-option" type="checkbox" id="electricalCheck" value="electrical" checked>
+                                <label class="form-check-label" for="electricalCheck">Electrical Engineering</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input branch-filter-option" type="checkbox" id="mechanicalCheck" value="mechanical" checked>
+                                <label class="form-check-label" for="mechanicalCheck">Mechanical Engineering</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input branch-filter-option" type="checkbox" id="generalCheck" value="general" checked>
+                                <label class="form-check-label" for="generalCheck">General</label>
+                            </div>
+                            <button class="btn btn-primary btn-sm mt-3 w-100" id="applyFilters">Apply Filters</button>
+                        </div>
+
+                        <div class="privacy-controls">
+                            <h5>Privacy Settings</h5>
+                            <p class="small">Control who can see your information</p>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="profileSwitch" checked>
+                                <label class="form-check-label" for="profileSwitch">Profile Visibility</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="contactSwitch" checked>
+                                <label class="form-check-label" for="contactSwitch">Contact Details</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="socialSwitch">
+                                <label class="form-check-label" for="socialSwitch">Social Profiles</label>
+                            </div>
+                            <button class="btn btn-primary btn-sm mt-3 w-100">Save Settings</button>
+                        </div>
+                    </div>
+
+                    <!-- Main Content Area -->
+                    <div class="col-lg-9">
+                        <h2 class="section-title">Featured Alumni</h2>
+                        
+                        <div class="row" id="alumniContainer">
+                            <!-- Alumni cards will be loaded here -->
+                        </div>
+
+                        <div class="loading-spinner" id="alumniLoading">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+
+                        <h2 class="section-title mt-5">Upcoming Events</h2>
+                        
+                        <div class="card mb-4 event-card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2 text-center">
+                                        <div class="event-date">
+                                            <h3 class="mb-0">15</h3>
+                                            <p class="mb-0">Sept 2023</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h4>Annual Alumni Meet 2023</h4>
+                                        <p>Join us for the annual gathering of alumni. Network with batchmates and faculty members.</p>
+                                        <span class="badge bg-primary">150+ attending</span>
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex align-items-center">
+                                        <button class="btn btn-primary w-100">Register</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-4 event-card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2 text-center">
+                                        <div class="event-date">
+                                            <h3 class="mb-0">28</h3>
+                                            <p class="mb-0">Oct 2023</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h4>Industry-Academia Conclave</h4>
+                                        <p>Discussion on emerging trends in technology and research opportunities.</p>
+                                        <span class="badge bg-primary">80+ attending</span>
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex align-items-center">
+                                        <button class="btn btn-primary w-100">Register</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 class="section-title mt-5">Career Opportunities</h2>
+                        
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h4>Software Development Engineer</h4>
+                                <p class="text-muted">Amazon • Posted by: Neha Verma (CSE, 2020)</p>
+                                <p>Looking for talented software developers with strong problem-solving skills. Minimum 2 years experience required.</p>
+                                <button class="btn btn-sm btn-outline-primary">Apply Now</button>
+                                <button class="btn btn-sm btn-outline-secondary">Save for Later</button>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h4>Civil Project Manager</h4>
+                                <p class="text-muted">Shapoorji Pallonji • Posted by: Amit Shah (Civil, 2018)</p>
+                                <p>Require project managers with experience in infrastructure projects. PMP certification preferred.</p>
+                                <button class="btn btn-sm btn-outline-primary">Apply Now</button>
+                                <button class="btn btn-sm btn-outline-secondary">Save for Later</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other Pages (initially hidden) -->
+        <div class="page d-none" id="directory-page">
+            <div class="container my-5">
+                <h2 class="section-title">Alumni Directory</h2>
+                <p>Search and connect with alumni from various institutions.</p>
+                <!-- Directory content will go here -->
+            </div>
+        </div>
+
+        <div class="page d-none" id="profile-page">
+            <div class="profile-header">
+                <div class="container text-center">
+                    <img src="https://via.placeholder.com/150x150/1a4d8c/ffffff?text=U" alt="User" class="profile-avatar mb-3">
+                    <h2 id="profile-name">John Doe</h2>
+                    <p class="lead">Computer Science, 2020</p>
+                    <p>Software Engineer at Tech Company</p>
+                </div>
+            </div>
+            <div class="container my-5">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Profile Details</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Email
+                                        <span id="profile-email">john.doe@example.com</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Phone
+                                        <span id="profile-phone">+1 (555) 123-4567</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Location
+                                        <span id="profile-location">San Francisco, CA</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        College
+                                        <span id="profile-college">Stanford University</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">About Me</h5>
+                                <p id="profile-about">Experienced software engineer with a passion for building scalable web applications. Love to mentor new developers and contribute to open source projects.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Experience</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <h6>Senior Software Engineer</h6>
+                                        <p class="mb-1">Tech Company • 2021 - Present</p>
+                                        <p class="text-muted">Working on cloud infrastructure and distributed systems.</p>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <h6>Software Developer</h6>
+                                        <p class="mb-1">Startup Inc. • 2020 - 2021</p>
+                                        <p class="text-muted">Full-stack development using React and Node.js.</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page d-none" id="dashboard-page">
+            <div class="container my-5">
+                <h2 class="section-title">Dashboard</h2>
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="card dashboard-card text-center">
+                            <div class="card-body">
+                                <div class="dashboard-stat">12</div>
+                                <p class="card-text">Connections</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card dashboard-card text-center">
+                            <div class="card-body">
+                                <div class="dashboard-stat">5</div>
+                                <p class="card-text">Events Attended</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card dashboard-card text-center">
+                            <div class="card-body">
+                                <div class="dashboard-stat">3</div>
+                                <p class="card-text">Job Applications</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card dashboard-card text-center">
+                            <div class="card-body">
+                                <div class="dashboard-stat">8</div>
+                                <p class="card-text">Messages</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Recent Activity</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">You connected with Sarah Johnson</li>
+                                    <li class="list-group-item">You registered for Alumni Meet 2023</li>
+                                    <li class="list-group-item">You updated your profile information</li>
+                                    <li class="list-group-item">You applied for Senior Developer position</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Notifications</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">New message from Alex Thompson</li>
+                                    <li class="list-group-item">Event reminder: Industry Conclave in 3 days</li>
+                                    <li class="list-group-item">Your profile was viewed 15 times this week</li>
+                                    <li class="list-group-item">New job posting matches your skills</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page d-none" id="privacy-page">
+            <div class="container my-5">
+                <h2 class="section-title">Privacy Settings</h2>
+                <p>Control how your information is shared with other alumni.</p>
+                
+                <div class="privacy-section">
+                    <h4>Profile Visibility</h4>
+                    <p>Choose who can see your profile information</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="profileVisibility" id="visibilityEveryone" checked>
+                        <label class="form-check-label" for="visibilityEveryone">
+                            Everyone in the alumni network
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="profileVisibility" id="visibilityConnections">
+                        <label class="form-check-label" for="visibilityConnections">
+                            Only my connections
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="profileVisibility" id="visibilityPrivate">
+                        <label class="form-check-label" for="visibilityPrivate">
+                            Private (only you)
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="privacy-section">
+                    <h4>Contact Information</h4>
+                    <p>Choose who can see your contact details</p>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="showEmail" checked>
+                        <label class="form-check-label" for="showEmail">Show email address</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="showPhone" checked>
+                        <label class="form-check-label" for="showPhone">Show phone number</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="showLocation">
+                        <label class="form-check-label" for="showLocation">Show location</label>
+                    </div>
+                </div>
+                
+                <div class="privacy-section">
+                    <h4>Data Sharing Preferences</h4>
+                    <p>Control how your data is used within the platform</p>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="allowResearch" checked>
+                        <label class="form-check-label" for="allowResearch">Allow my anonymized data to be used for research purposes</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="allowMarketing">
+                        <label class="form-check-label" for="allowMarketing">Receive marketing communications</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="allowNotifications" checked>
+                        <label class="form-check-label" for="allowNotifications">Enable browser notifications</label>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary btn-lg">Save Privacy Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login to Alumni Portal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="login-form">
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="loginEmail" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="loginEmail" placeholder="name@example.com" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="loginPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Remember me</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <a href="#" id="showForgotPassword">Forgot password?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create an Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="login-form">
+                        <form id="registerForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerEmail" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="registerEmail" placeholder="name@example.com" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="registerPassword" placeholder="Create a password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="collegeName" class="form-label">College/University</label>
+                                <input type="text" class="form-control" id="collegeName" placeholder="Enter your college name" required>
+                                <div class="form-text">Start typing to see suggestions</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="graduationYear" class="form-label">Graduation Year</label>
+                                <select class="form-select" id="graduationYear" required>
+                                    <option value="" selected disabled>Select year</option>
+                                    <option>2020</option>
+                                    <option>2021</option>
+                                    <option>2022</option>
+                                    <option>2023</option>
+                                    <option>2024</option>
+                                    <option>2025</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="branch" class="form-label">Branch/Department</label>
+                                <select class="form-select" id="branch" required>
+                                    <option value="" selected disabled>Select your branch</option>
+                                    <option>Civil Engineering</option>
+                                    <option>Computer Science & Engineering</option>
+                                    <option>Electrical Engineering</option>
+                                    <option>Mechanical Engineering</option>
+                                    <option>Business Administration</option>
+                                    <option>Arts & Sciences</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="termsAgree" required>
+                                <label class="form-check-label" for="termsAgree">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Reset Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="login-form">
+                        <form id="forgotPasswordForm">
+                            <div class="mb-3">
+                                <label for="resetEmail" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="resetEmail" placeholder="name@example.com" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <a href="#" id="showLogin">Back to login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>Alumni Connect</h5>
+                    <p>Connecting graduates from institutions worldwide</p>
+                    <p>Email: support@alumniconnect.com</p>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white" data-page="home">Home</a></li>
+                        <li><a href="#" class="text-white" data-page="directory">Directory</a></li>
+                        <li><a href="#" class="text-white" data-page="events">Events</a></li>
+                        <li><a href="#" class="text-white" data-page="opportunities">Opportunities</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Legal</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-white">Terms of Service</a></li>
+                        <li><a href="#" class="text-white">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 Alumni Connect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enhanced JavaScript for the alumni portal
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample alumni data
+            const alumniData = [
+                { 
+                    name: "Rahul Sharma", 
+                    branch: "Civil Engineering", 
+                    year: "2020", 
+                    company: "L&T Construction",
+                    image: "https://via.placeholder.com/100x100/1a4d8c/ffffff?text=R",
+                    college: "IIT Delhi"
+                },
+                { 
+                    name: "Priya Patel", 
+                    branch: "Computer Science", 
+                    year: "2021", 
+                    company: "Microsoft",
+                    image: "https://via.placeholder.com/100x100/1a4d8c/ffffff?text=P",
+                    college: "Stanford University"
+                },
+                { 
+                    name: "Sanjay Mehta", 
+                    branch: "Electrical Engineering", 
+                    year: "2022", 
+                    company: "Siemens",
+                    image: "https://via.placeholder.com/100x100/1a4d8c/ffffff?text=S",
+                    college: "MIT"
+                },
+                { 
+                    name: "Mohan Desai", 
+                    branch: "Mechanical Engineering", 
+                    year: "2019", 
+                    company: "Tata Motors",
+                    image: "https://via.placeholder.com/100x100/1a4d8c/ffffff?text=M",
+                    college: "University of Michigan"
+                },
+                { 
+                    name: "Neha Verma", 
+                    branch: "Computer Science", 
+                    year: "2020", 
+                    company: "Amazon",
+                    image: "https://via.placeholder.com/100x100/1a4d8c/ffffff?text=N",
+                    college: "Harvard University"
+                },
+                { 
+                    name: "Amit Shah", 
+                    branch: "Civil Engineering", 
+                    year: "2018", 
+                    company: "Shapoorji Pallonji",
+                    image: "https://via.placeholder.com/100x100/1a4d8c/ffffff?text=A",
+                    college: "UC Berkeley"
+                }
+            ];
+            
+            // Current user state
+            let currentUser = null;
+            
+            // Check if user is logged in (from localStorage)
+            function checkLoginStatus() {
+                const userData = localStorage.getItem('currentUser');
+                if (userData) {
+                    currentUser = JSON.parse(userData);
+                    updateUIForLoggedInUser();
+                }
+            }
+            
+            // Update UI when user logs in
+            function updateUIForLoggedInUser() {
+                document.getElementById('authButtons').classList.add('d-none');
+                document.getElementById('userMenu').classList.remove('d-none');
+                document.getElementById('username').textContent = currentUser.firstName;
+                
+                // Update profile page if needed
+                if (document.getElementById('profile-page').classList.contains('d-none') === false) {
+                    loadProfileData();
+                }
+            }
+            
+            // Load alumni data into the page
+            function loadAlumniData() {
+                const container = document.getElementById('alumniContainer');
+                container.innerHTML = '';
+                
+                alumniData.forEach(alumni => {
+                    const card = document.createElement('div');
+                    card.className = 'col-md-6 col-lg-4 mb-4 alumni-item';
+                    card.innerHTML = `
+                        <div class="card alumni-card">
+                            <div class="card-body text-center">
+                                <img src="${alumni.image}" alt="${alumni.name}" class="rounded-circle mb-3">
+                                <h5>${alumni.name}</h5>
+                                <p class="text-muted">${alumni.branch}, ${alumni.year}</p>
+                                <p class="text-muted small">${alumni.college}</p>
+                                <p>${alumni.company}</p>
+                                <div class="social-links">
+                                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                    <a href="#"><i class="fas fa-envelope"></i></a>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm mt-2">View Profile</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            
+            // Load profile data
+            function loadProfileData() {
+                if (currentUser) {
+                    document.getElementById('profile-name').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+                    document.getElementById('profile-email').textContent = currentUser.email;
+                    document.getElementById('profile-college').textContent = currentUser.college;
+                }
+            }
+            
+            // Show toast notification
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <div class="toast-body">
+                        <div class="d-flex justify-content-between">
+                            <div>${message}</div>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('.toast-container').appendChild(toast);
+                
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+                
+                // Remove toast after it hides
+                toast.addEventListener('hidden.bs.toast', () => {
+                    toast.remove();
+                });
+            }
+            
+            // Handle page navigation
+            function setupPageNavigation() {
+                document.querySelectorAll('[data-page]').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const pageId = `${this.dataset.page}-page`;
+                        
+                        // Hide all pages
+                        document.querySelectorAll('.page').forEach(page => {
+                            page.classList.add('d-none');
+                        });
+                        
+                        // Show selected page
+                        document.getElementById(pageId).classList.remove('d-none');
+                        
+                        // Update active nav link
+                        document.querySelectorAll('.nav-link').forEach(navLink => {
+                            navLink.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        // Scroll to top
+                        window.scrollTo(0, 0);
+                    });
+                });
+            }
+            
+            // Setup authentication modals
+            function setupAuthModals() {
+                // Show forgot password modal
+                document.getElementById('showForgotPassword').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+                    loginModal.hide();
+                    
+                    const forgotModal = new bootstrap.Modal(document.getElementById('forgotPasswordModal'));
+                    forgotModal.show();
+                });
+                
+                // Show login modal
+                document.getElementById('showLogin').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const forgotModal = bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal'));
+                    forgotModal.hide();
+                    
+                    const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                    loginModal.show();
+                });
+                
+                // Login form submission
+                document.getElementById('loginForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('loginEmail').value;
+                    const password = document.getElementById('loginPassword').value;
+                    
+                    // Simulate login process
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging in...';
+                    
+                    setTimeout(() => {
+                        // For demo purposes, create a user object
+                        currentUser = {
+                            firstName: 'John',
+                            lastName: 'Doe',
+                            email: email,
+                            college: 'Stanford University',
+                            graduationYear: '2020',
+                            branch: 'Computer Science'
+                        };
+                        
+                        // Save to localStorage
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        
+                        // Update UI
+                        updateUIForLoggedInUser();
+                        
+                        // Hide modal
+                        bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                        
+                        // Show success message
+                        showToast('Login successful!');
+                        
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                    }, 1500);
+                });
+                
+                // Registration form submission
+                document.getElementById('registerForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get form values
+                    const firstName = document.getElementById('firstName').value;
+                    const lastName = document.getElementById('lastName').value;
+                    const email = document.getElementById('registerEmail').value;
+                    const password = document.getElementById('registerPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    const college = document.getElementById('collegeName').value;
+                    const graduationYear = document.getElementById('graduationYear').value;
+                    const branch = document.getElementById('branch').value;
+                    
+                    // Password confirmation check
+                    if (password !== confirmPassword) {
+                        showToast('Passwords do not match!', 'error');
+                        return;
+                    }
+                    
+                    // Simulate registration process
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Registering...';
+                    
+                    setTimeout(() => {
+                        // Create user object
+                        currentUser = {
+                            firstName: firstName,
+                            lastName: lastName,
+                            email: email,
+                            college: college,
+                            graduationYear: graduationYear,
+                            branch: branch
+                        };
+                        
+                        // Save to localStorage
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        
+                        // Update UI
+                        updateUIForLoggedInUser();
+                        
+                        // Hide modal
+                        bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+                        
+                        // Show success message
+                        showToast('Registration successful! Welcome to Alumni Connect.');
+                        
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                    }, 1500);
+                });
+                
+                // Forgot password form
+                document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('resetEmail').value;
+                    
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...';
+                    
+                    setTimeout(() => {
+                        // Hide modal
+                        bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal')).hide();
+                        
+                        // Show success message
+                        showToast('Password reset instructions sent to your email.');
+                        
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                    }, 1500);
+                });
+            }
+            
+            // Logout functionality
+            function setupLogout() {
+                document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Clear user data
+                    localStorage.removeItem('currentUser');
+                    currentUser = null;
+                    
+                    // Update UI
+                    document.getElementById('authButtons').classList.remove('d-none');
+                    document.getElementById('userMenu').classList.add('d-none');
+                    
+                    // Show home page
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.classList.add('d-none');
+                    });
+                    document.getElementById('home-page').classList.remove('d-none');
+                    
+                    // Show success message
+                    showToast('You have been logged out successfully.');
+                });
+            }
+            
+            // Back to top button
+            function setupBackToTop() {
+                const backToTopBtn = document.getElementById('backToTop');
+                if (backToTopBtn) {
+                    window.addEventListener('scroll', function() {
+                        if (window.pageYOffset > 300) {
+                            backToTopBtn.classList.add('visible');
+                        } else {
+                            backToTopBtn.classList.remove('visible');
+                        }
+                    });
+                    
+                    backToTopBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                }
+            }
+            
+            // Initialize the application
+            function init() {
+                checkLoginStatus();
+                loadAlumniData();
+                setupPageNavigation();
+                setupAuthModals();
+                setupLogout();
+                setupBackToTop();
+                
+                // Animate stats counter
+                const animateCounter = (element, target, duration = 2000) => {
+                    const start = 0;
+                    const increment = target / (duration / 16);
+                    let current = start;
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            element.textContent = target + '+';
+                            clearInterval(timer);
+                        } else {
+                            element.textContent = Math.floor(current) + '+';
+                        }
+                    }, 16);
+                };
+                
+                // Start counter animation when stats section is in view
+                const statsSection = document.querySelector('.stats-section');
+                const alumniCount = document.getElementById('alumniCount');
+                
+                if (statsSection && alumniCount) {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                animateCounter(alumniCount, 1500);
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.5 });
+                    
+                    observer.observe(statsSection);
+                }
+            }
+            
+            // Start the application
+            init();
+        });
+    </script>
+</body>
+</html>
