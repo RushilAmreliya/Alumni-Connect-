@@ -1,0 +1,2968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Connect Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a4d8c;
+            --secondary: #ff6b35;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --civil: #3498db;
+            --cse: #9b59b6;
+            --electrical: #e74c3c;
+            --mechanical: #f39c12;
+            --business: #2ecc71;
+            --medical: #e84393;
+            --arts: #00cec9;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+        
+        /* Auth Styles */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #2c6cb0 100%);
+            padding: 20px;
+        }
+        
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .auth-header {
+            background: var(--primary);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .auth-body {
+            background: white;
+            padding: 30px;
+        }
+        
+        .auth-footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        
+        .auth-switch {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Main App Styles (initially hidden) */
+        #mainApplication {
+            display: none;
+            padding-top: 76px;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #e55a2b;
+            border-color: #e55a2b;
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25);
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(26, 77, 140, 0.85), rgba(26, 77, 140, 0.95)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            position: relative;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .alumni-card {
+            position: relative;
+            height: 100%;
+        }
+        
+        .alumni-card .branch-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .alumni-card.civil .branch-badge { background-color: var(--civil); }
+        .alumni-card.cse .branch-badge { background-color: var(--cse); }
+        .alumni-card.electrical .branch-badge { background-color: var(--electrical); }
+        .alumni-card.mechanical .branch-badge { background-color: var(--mechanical); }
+        .alumni-card.business .branch-badge { background-color: var(--business); }
+        .alumni-card.medical .branch-badge { background-color: var(--medical); }
+        .alumni-card.arts .branch-badge { background-color: var(--arts); }
+        
+        .alumni-card .social-links a {
+            color: var(--primary);
+            margin-right: 15px;
+            font-size: 1.2rem;
+            transition: color 0.2s ease;
+        }
+        
+        .alumni-card .social-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .alumni-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+        
+        .filter-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+        
+        /* Profile Modal */
+        .profile-modal .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .profile-modal .modal-header {
+            background: linear-gradient(to right, var(--primary), #2c6cb0);
+            color: white;
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .profile-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+        
+        .skill-badge {
+            display: inline-block;
+            background: #f1f8ff;
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 0 5px 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .toast {
+            background: white;
+            border-left: 4px solid var(--success);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s forwards;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Loading animation */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: var(--primary);
+        }
+        
+        /* Connection status */
+        .connection-status {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background-color: var(--success);
+            color: white;
+        }
+        
+        /* Personalized recommendations */
+        .recommendation-card {
+            border-left: 4px solid var(--secondary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 3rem 0;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .alumni-img {
+                width: 80px;
+                height: 80px;
+            }
+            
+            #mainApplication {
+                padding-top: 68px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Container (initially shown) -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h3><i class="fas fa-graduation-cap me-2"></i>Alumni Connect</h3>
+                <p class="mb-0">Sign in to your account</p>
+            </div>
+            <div class="auth-body">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="loginEmail" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="loginEmail" placeholder="name@example.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                </form>
+            </div>
+            <div class="auth-footer">
+                <p class="mb-0">Don't have an account? <a href="#" class="auth-switch" id="showRegister">Sign up</a></p>
+                <p class="mt-2"><a href="#" class="text-muted">Forgot your password?</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application (initially hidden) -->
+    <div id="mainApplication">
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <img src="https://via.placeholder.com/40x40/1a4d8c/ffffff?text=A" alt="Logo" class="me-2">
+                    Alumni Connect
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="#" data-page="home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-page="directory">Alumni Directory</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-page="events">Events</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-page="opportunities">Opportunities</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-page="dashboard">Dashboard</a></li>
+                    </ul>
+                    
+                    <div class="navbar-nav ms-auto">
+                        <div class="d-flex align-items-center">
+                            <div class="dropdown">
+                                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://via.placeholder.com/32x32/1a4d8c/ffffff?text=U" alt="User" width="32" height="32" class="rounded-circle me-2" id="navbarUserImg">
+                                    <span id="username">User</span>
+                                    <span class="position-relative ms-2" id="notificationBell">
+                                        <i class="fas fa-bell"></i>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationCount">0</span>
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdownUser">
+                                    <li><a class="dropdown-item" href="#" data-page="profile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="#" data-page="dashboard">Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="#" data-page="connections">Connections</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#" id="logoutBtn">Sign out</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Toast Container -->
+        <div class="toast-container"></div>
+
+        <!-- Page Content -->
+        <div id="pageContent">
+            <!-- Home Page -->
+            <div class="page" id="home-page">
+                <!-- Hero Section -->
+                <section class="hero-section text-center">
+                    <div class="container">
+                        <h1 class="display-4 fw-bold mb-3">Alumni Network</h1>
+                        <p class="lead mb-4">Connecting past, present and future graduates from institutions worldwide</p>
+                        <button class="btn btn-primary btn-lg mt-3" data-page="directory">Explore Alumni Directory</button>
+                    </div>
+                </section>
+
+                <!-- Stats Section -->
+                <section class="py-5">
+                    <div class="container">
+                        <div class="row text-center">
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="stats-number" id="alumniCount">2,347</div>
+                                <div class="text-muted">Registered Alumni</div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="stats-number">18</div>
+                                <div class="text-muted">Events This Year</div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="stats-number">67</div>
+                                <div class="text-muted">Job Opportunities</div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="stats-number">8</div>
+                                <div class="text-muted">Active Branches</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Featured Alumni Section -->
+                <section class="py-5 bg-light">
+                    <div class="container">
+                        <h2 class="section-title text-center">Featured Alumni</h2>
+                        <p class="text-center mb-5">Connect with these recently active alumni from our network</p>
+                        
+                        <div class="row" id="featuredAlumni">
+                            <!-- Featured alumni will be loaded here -->
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button class="btn btn-outline-primary" data-page="directory">View All Alumni</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Main Content -->
+                <div class="container my-5">
+                    <div class="row">
+                        <!-- Left Sidebar -->
+                        <div class="col-lg-3">
+                            <div class="filter-panel">
+                                <h5>Quick Links</h5>
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action" data-page="directory">
+                                        <i class="fas fa-user-friends me-2"></i> Alumni Directory
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" data-page="events">
+                                        <i class="fas fa-calendar-alt me-2"></i> Upcoming Events
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" data-page="opportunities">
+                                        <i class="fas fa-briefcase me-2"></i> Job Opportunities
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" data-page="profile">
+                                        <i class="fas fa-user-edit me-2"></i> Update Profile
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="filter-panel mt-4">
+                                <h5>Network Stats</h5>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>New This Week</span>
+                                    <span class="fw-bold">42</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>Mentors Available</span>
+                                    <span class="fw-bold">243</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2">
+                                    <span>Hiring Now</span>
+                                    <span class="fw-bold">56</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Content Area -->
+                        <div class="col-lg-9">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Upcoming Events</h5>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-primary text-white rounded p-2 me-3">
+                                                    <div class="fw-bold">15</div>
+                                                    <div>Sept</div>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">Annual Alumni Meet 2023</h6>
+                                                    <p class="text-muted mb-0">Virtual Event</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-primary text-white rounded p-2 me-3">
+                                                    <div class="fw-bold">28</div>
+                                                    <div>Oct</div>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">Industry-Academia Conclave</h6>
+                                                    <p class="text-muted mb-0">New York, USA</p>
+                                                </div>
+                                            </div>
+                                            <a href="#" class="btn btn-outline-primary btn-sm" data-page="events">View All Events</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Job Opportunities</h5>
+                                            <div class="mb-3">
+                                                <h6 class="mb-0">Software Development Engineer</h6>
+                                                <p class="text-muted mb-0">Amazon • Posted by: Neha Verma</p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <h6 class="mb-0">Civil Project Manager</h6>
+                                                <p class="text-muted mb-0">Shapoorji Pallonji • Posted by: Amit Shah</p>
+                                            </div>
+                                            <a href="#" class="btn btn-outline-primary btn-sm" data-page="opportunities">View All Opportunities</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Recent Network Activity</h5>
+                                    <div class="d-flex align-items-start mb-3">
+                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80" class="rounded-circle me-3" width="40" height="40" alt="User">
+                                        <div>
+                                            <h6 class="mb-0">Rahul Sharma updated his profile</h6>
+                                            <p class="text-muted mb-0">2 hours ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start mb-3">
+                                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80" class="rounded-circle me-3" width="40" height="40" alt="User">
+                                        <div>
+                                            <h6 class="mb-0">Priya Patel posted a new job opportunity</h6>
+                                            <p class="text-muted mb-0">5 hours ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start mb-3">
+                                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80" class="rounded-circle me-3" width="40" height="40" alt="User">
+                                        <div>
+                                            <h6 class="mb-0">Sanjay Mehta registered for the upcoming event</h6>
+                                            <p class="text-muted mb-0">Yesterday</p>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="btn btn-outline-primary btn-sm">Show More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alumni Directory Page -->
+            <div class="page d-none" id="directory-page">
+                <!-- Directory Header -->
+                <div class="directory-header">
+                    <div class="container">
+                        <h1 class="display-4 fw-bold">Alumni Directory</h1>
+                        <p class="lead">Connect with fellow alumni from around the world</p>
+                        <div class="row mt-4">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-lg" placeholder="Search by name, company, skills..." id="searchInput">
+                                    <button class="btn btn-primary" type="button" id="searchButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                <button class="btn btn-outline-light me-2" id="advancedSearchToggle">
+                                    <i class="fas fa-sliders-h"></i> Advanced Search
+                                </button>
+                                <button class="btn btn-light" id="addProfileBtn">
+                                    <i class="fas fa-plus"></i> Add Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Search Tools (Initially hidden) -->
+                <div class="container mb-4 d-none" id="advancedSearchTools">
+                    <div class="search-box">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Advanced Filters</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Branch/Department</label>
+                                        <select class="form-select" id="branchFilter">
+                                            <option value="">All Branches</option>
+                                            <option value="civil">Civil Engineering</option>
+                                            <option value="cse">Computer Science & Engineering</option>
+                                            <option value="electrical">Electrical Engineering</option>
+                                            <option value="mechanical">Mechanical Engineering</option>
+                                            <option value="business">Business Administration</option>
+                                            <option value="medical">Medical Sciences</option>
+                                            <option value="arts">Arts & Humanities</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Graduation Year</label>
+                                        <select class="form-select" id="yearFilter">
+                                            <option value="">All Years</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2018">2018</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" class="form-control" id="locationFilter" placeholder="City, Country">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Company</label>
+                                        <input type="text" class="form-control" id="companyFilter" placeholder="Company name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Skills & Industries</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Skills</label>
+                                    <select class="form-select" multiple id="skillsFilter">
+                                        <option value="javascript">JavaScript</option>
+                                        <option value="python">Python</option>
+                                        <option value="react">React</option>
+                                        <option value="node">Node.js</option>
+                                        <option value="aws">AWS</option>
+                                        <option value="ui-ux">UI/UX Design</option>
+                                        <option value="project-management">Project Management</option>
+                                    </select>
+                                    <div class="form-text">Hold Ctrl/Cmd to select multiple</div>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="availableForMentoring">
+                                    <label class="form-check-label" for="availableForMentoring">
+                                        Available for Mentoring
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="hiring">
+                                    <label class="form-check-label" for="hiring">
+                                        Currently Hiring
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <span class="me-2">Active filters:</span>
+                                <div class="d-inline-block" id="activeFilters"></div>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-secondary btn-sm me-2" id="clearFilters">
+                                    <i class="fas fa-times"></i> Clear All
+                                </button>
+                                <button class="btn btn-primary btn-sm" id="applyFilters">
+                                    <i class="fas fa-check"></i> Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="container my-5">
+                    <div class="row">
+                        <!-- Left Sidebar -->
+                        <div class="col-lg-3">
+                            <div class="filter-panel">
+                                <h5>Quick Filters</h5>
+                                
+                                <div class="mb-4">
+                                    <h6>By Branch</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="civil" id="civilCheck">
+                                        <label class="form-check-label" for="civilCheck">Civil Engineering</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="cse" id="cseCheck" checked>
+                                        <label class="form-check-label" for="cseCheck">Computer Science</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="electrical" id="electricalCheck" checked>
+                                        <label class="form-check-label" for="electricalCheck">Electrical Engineering</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="mechanical" id="mechanicalCheck">
+                                        <label class="form-check-label" for="mechanicalCheck">Mechanical Engineering</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="business" id="businessCheck">
+                                        <label class="form-check-label" for="businessCheck">Business Administration</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="medical" id="medicalCheck">
+                                        <label class="form-check-label" for="medicalCheck">Medical Sciences</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="arts" id="artsCheck">
+                                        <label class="form-check-label" for="artsCheck">Arts & Humanities</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h6>By Graduation Year</h6>
+                                    <select class="form-select" id="yearQuickFilter">
+                                        <option value="">All Years</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2019">2019</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h6>By Location</h6>
+                                    <select class="form-select" id="locationQuickFilter">
+                                        <option value="">All Locations</option>
+                                        <option value="usa">United States</option>
+                                        <option value="india">India</option>
+                                        <option value="uk">United Kingdom</option>
+                                        <option value="canada">Canada</option>
+                                        <option value="australia">Australia</option>
+                                        <option value="germany">Germany</option>
+                                    </select>
+                                </div>
+                                
+                                <button class="btn btn-primary w-100 mt-3" id="applyQuickFilters">
+                                    Apply Filters
+                                </button>
+                            </div>
+                            
+                            <div class="filter-panel mt-4">
+                                <h5>Directory Stats</h5>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>Total Alumni</span>
+                                    <span class="fw-bold">2,347</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>Active This Month</span>
+                                    <span class="fw-bold">523</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>New This Month</span>
+                                    <span class="fw-bold">68</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2">
+                                    <span>Mentors Available</span>
+                                    <span class="fw-bold">243</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Content Area -->
+                        <div class="col-lg-9">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h2 class="section-title mb-0">Alumni Profiles</h2>
+                                <div class="d-flex">
+                                    <div class="dropdown me-2">
+                                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown">
+                                            <i class="fas fa-sort"></i> Sort By
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                                            <li><a class="dropdown-item sort-option" href="#" data-sort="name">Name (A-Z)</a></li>
+                                            <li><a class="dropdown-item sort-option" href="#" data-sort="recent">Most Recent</a></li>
+                                            <li><a class="dropdown-item sort-option" href="#" data-sort="relevance">Relevance</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="viewDropdown" data-bs-toggle="dropdown">
+                                            <i class="fas fa-th"></i> View
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="viewDropdown">
+                                            <li><a class="dropdown-item view-option active" href="#" data-view="grid">Grid View</a></li>
+                                            <li><a class="dropdown-item view-option" href="#" data-view="list">List View</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row" id="alumniContainer">
+                                <!-- Alumni cards will be loaded here -->
+                            </div>
+                            
+                            <div class="loading-spinner" id="alumniLoading">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            
+                            <nav aria-label="Alumni directory pagination" class="mt-5">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Page -->
+            <div class="page d-none" id="dashboard-page">
+                <div class="container my-5">
+                    <h2 class="section-title">My Dashboard</h2>
+                    
+                    <div class="row mb-5">
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h3 class="stats-number" id="connectionCount">0</h3>
+                                    <p class="text-muted">Connections</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h3 class="stats-number" id="profileViews">0</h3>
+                                    <p class="text-muted">Profile Views</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h3 class="stats-number" id="eventCount">0</h3>
+                                    <p class="text-muted">Upcoming Events</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h3 class="stats-number" id="messageCount">0</h3>
+                                    <p class="text-muted">Unread Messages</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                            <div class="card">
+                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Connection Suggestions</h5>
+                                    <a href="#" data-page="directory" class="btn btn-sm btn-outline-primary">View All</a>
+                                </div>
+                                <div class="card-body" id="connectionSuggestions">
+                                    <!-- Connection suggestions will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 mb-4">
+                            <div class="card">
+                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Upcoming Events</h5>
+                                    <a href="#" data-page="events" class="btn btn-sm btn-outline-primary">View All</a>
+                                </div>
+                                <div class="card-body" id="upcomingEvents">
+                                    <!-- Upcoming events will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                            <div class="card">
+                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Recent Activity</h5>
+                                </div>
+                                <div class="card-body" id="recentActivity">
+                                    <!-- Recent activity will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 mb-4">
+                            <div class="card">
+                                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Job Recommendations</h5>
+                                    <a href="#" data-page="opportunities" class="btn btn-sm btn-outline-primary">View All</a>
+                                </div>
+                                <div class="card-body" id="jobRecommendations">
+                                    <!-- Job recommendations will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Connections Page -->
+            <div class="page d-none" id="connections-page">
+                <div class="container my-5">
+                    <h2 class="section-title">My Connections</h2>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search connections..." id="connectionSearch">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="connectionFilterDropdown" data-bs-toggle="dropdown">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="connectionFilterDropdown">
+                                    <li><a class="dropdown-item" href="#">All Connections</a></li>
+                                    <li><a class="dropdown-item" href="#">By Location</a></li>
+                                    <li><a class="dropdown-item" href="#">By Industry</a></li>
+                                    <li><a class="dropdown-item" href="#">Available for Mentoring</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row" id="connectionsContainer">
+                        <!-- Connections will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Pages (simplified for this example) -->
+            <div class="page d-none" id="events-page">
+                <div class="container my-5">
+                    <h2 class="section-title">Events</h2>
+                    <p>This is the events page content.</p>
+                </div>
+            </div>
+
+            <div class="page d-none" id="opportunities-page">
+                <div class="container my-5">
+                    <h2 class="section-title">Opportunities</h2>
+                    <p>This is the opportunities page content.</p>
+                </div>
+            </div>
+
+            <div class="page d-none" id="profile-page">
+                <div class="container my-5">
+                    <h2 class="section-title">My Profile</h2>
+                    
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card mb-4">
+                                <div class="card-body text-center">
+                                    <img src="https://via.placeholder.com/150/1a4d8c/ffffff?text=U" alt="Profile" class="rounded-circle mb-3" width="150" height="150">
+                                    <h4 id="profileUserName">User Name</h4>
+                                    <p class="text-muted" id="profileUserTitle">Position at Company</p>
+                                    
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <button class="btn btn-primary me-2" id="editProfileBtn">Edit Profile</button>
+                                        <button class="btn btn-outline-primary">Share Profile</button>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-center">
+                                        <a href="#" class="text-primary mx-2"><i class="fab fa-linkedin fa-lg"></i></a>
+                                        <a href="#" class="text-primary mx-2"><i class="fab fa-twitter fa-lg"></i></a>
+                                        <a href="#" class="text-primary mx-2"><i class="fas fa-globe fa-lg"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5>Profile Completeness</h5>
+                                    <div class="progress mb-3">
+                                        <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <p class="small text-muted">Complete your profile to increase visibility</p>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-1"><i class="fas fa-check text-success me-2"></i> Basic Information</li>
+                                        <li class="mb-1"><i class="fas fa-check text-success me-2"></i> Education</li>
+                                        <li class="mb-1"><i class="fas fa-check text-success me-2"></i> Experience</li>
+                                        <li class="mb-1"><i class="fas fa-times text-danger me-2"></i> Skills</li>
+                                        <li class="mb-1"><i class="fas fa-times text-danger me-2"></i> Profile Photo</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-8">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">About</h5>
+                                    <p id="profileAbout">This is a sample about section. Click edit to update this information.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="card-title mb-0">Experience</h5>
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#experienceModal">Add Experience</button>
+                                    </div>
+                                    <div id="profileExperience">
+                                        <!-- Experience will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="card-title mb-0">Education</h5>
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#educationModal">Add Education</button>
+                                    </div>
+                                    <div id="profileEducation">
+                                        <!-- Education will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="card-title mb-0">Skills</h5>
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#skillsModal">Add Skills</button>
+                                    </div>
+                                    <div id="profileSkills">
+                                        <!-- Skills will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="py-5 mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <h5>Alumni Connect</h5>
+                        <p>Connecting graduates from institutions worldwide</p>
+                        <p>Email: support@alumniconnect.com</p>
+                    </div>
+                    <div class="col-md-2 mb-4">
+                        <h5>Quick Links</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-white" data-page="home">Home</a></li>
+                            <li><a href="#" class="text-white" data-page="directory">Directory</a></li>
+                            <li><a href="#" class="text-white" data-page="events">Events</a></li>
+                            <li><a href="#" class="text-white" data-page="opportunities">Opportunities</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h5>Legal</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-white">Privacy Policy</a></li>
+                            <li><a href="#" class="text-white">Terms of Service</a></li>
+                            <li><a href="#" class="text-white">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h5>Connect With Us</h5>
+                        <div class="d-flex">
+                            <a href="#" class="text-white me-3"><i class="fab fa-facebook-f fa-lg"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in fa-lg"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                        </div>
+                        <div class="mt-3">
+                            <p class="mb-1">Download our mobile app:</p>
+                            <div>
+                                <a href="#" class="btn btn-outline-light btn-sm me-2">
+                                    <i class="fab fa-apple"></i> App Store
+                                </a>
+                                <a href="#" class="btn btn-outline-light btn-sm">
+                                    <i class="fab fa-google-play"></i> Play Store
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4 bg-light">
+                <div class="text-center">
+                    <p class="mb-0">&copy; 2023 Alumni Connect. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal fade profile-modal" id="profileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alumniName">Alumni Name</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <img src="" class="profile-img mb-3" alt="Alumni" id="modalAlumniImg">
+                            <div id="modalBranchBadge" class="profile-badge mb-3">Branch</div>
+                            <div class="social-links mb-3" id="modalSocialLinks"></div>
+                            <button class="btn btn-outline-primary btn-sm me-2" id="modalMessageBtn">
+                                <i class="fas fa-envelope"></i> Message
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm" id="modalConnectBtn">
+                                <i class="fas fa-link"></i> Connect
+                            </button>
+                        </div>
+                        <div class="col-md-8">
+                            <h5>About</h5>
+                            <p id="modalAbout">Loading...</p>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <h5>Contact Info</h5>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-envelope me-2"></i> <span id="modalEmail">email@example.com</span></li>
+                                        <li><i class="fas fa-phone me-2"></i> <span id="modalPhone">+1 (555) 123-4567</span></li>
+                                        <li><i class="fas fa-map-marker-alt me-2"></i> <span id="modalLocation">City, Country</span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Education</h5>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-graduation-cap me-2"></i> <span id="modalDegree">Degree</span></li>
+                                        <li><i class="fas fa-university me-2"></i> <span id="modalCollege">College</span></li>
+                                        <li><i class="fas fa-calendar me-2"></i> <span id="modalYear">Graduation Year</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <h5 class="mt-4">Experience</h5>
+                            <div id="modalExperience">
+                                <!-- Experience will be loaded here -->
+                            </div>
+                            
+                            <h5 class="mt-4">Skills</h5>
+                            <div id="modalSkills">
+                                <!-- Skills will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save Contact</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Profile Modal -->
+    <div class="modal fade" id="addProfileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Alumni Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProfileForm">
+                        <ul class="nav nav-pills mb-4" id="profileTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="basic-tab" data-bs-toggle="pill" data-bs-target="#basic" type="button" role="tab">Basic Info</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="education-tab" data-bs-toggle="pill" data-bs-target="#education" type="button" role="tab">Education</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="experience-tab" data-bs-toggle="pill" data-bs-target="#experience" type="button" role="tab">Experience</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="skills-tab" data-bs-toggle="pill" data-bs-target="#skills" type="button" role="tab">Skills & Social</button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content" id="profileTabContent">
+                            <!-- Basic Info Tab -->
+                            <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileFirstName" class="form-label">First Name *</label>
+                                        <input type="text" class="form-control" id="profileFirstName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileLastName" class="form-label">Last Name *</label>
+                                        <input type="text" class="form-control" id="profileLastName" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileEmail" class="form-label">Email Address *</label>
+                                        <input type="email" class="form-control" id="profileEmail" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profilePhone" class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" id="profilePhone">
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileLocation" class="form-label">Location</label>
+                                        <input type="text" class="form-control" id="profileLocation" placeholder="City, Country">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileBranch" class="form-label">Branch/Department *</label>
+                                        <select class="form-select" id="profileBranch" required>
+                                            <option value="">Select your branch</option>
+                                            <option value="civil">Civil Engineering</option>
+                                            <option value="cse">Computer Science & Engineering</option>
+                                            <option value="electrical">Electrical Engineering</option>
+                                            <option value="mechanical">Mechanical Engineering</option>
+                                            <option value="business">Business Administration</option>
+                                            <option value="medical">Medical Sciences</option>
+                                            <option value="arts">Arts & Humanities</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="profileAbout" class="form-label">About Yourself</label>
+                                    <textarea class="form-control" id="profileAbout" rows="3" placeholder="Brief introduction about yourself"></textarea>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="profileImage" class="form-label">Profile Image URL</label>
+                                    <input type="url" class="form-control" id="profileImage" placeholder="Paste image URL">
+                                    <div class="form-text">You can use services like imgur to upload an image and get a URL</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Education Tab -->
+                            <div class="tab-pane fade" id="education" role="tabpanel">
+                                <div class="mb-3">
+                                    <label for="profileCollege" class="form-label">College/University *</label>
+                                    <input type="text" class="form-control" id="profileCollege" required>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileDegree" class="form-label">Degree *</label>
+                                        <input type="text" class="form-control" id="profileDegree" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileGraduationYear" class="form-label">Graduation Year *</label>
+                                        <select class="form-select" id="profileGraduationYear" required>
+                                            <option value="">Select year</option>
+                                            <option>2023</option>
+                                            <option>2022</option>
+                                            <option>2021</option>
+                                            <option>2020</option>
+                                            <option>2019</option>
+                                            <option>2018</option>
+                                            <option>2017</option>
+                                            <option>2016</option>
+                                            <option>2015</option>
+                                            <option>2014</option>
+                                            <option>2013</option>
+                                            <option>2012</option>
+                                            <option>2011</option>
+                                            <option>2010</option>
+                                            <option>2009</option>
+                                            <option>2008</option>
+                                            <option>2007</option>
+                                            <option>2006</option>
+                                            <option>2005</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="profileAdditionalEducation" class="form-label">Additional Education</label>
+                                    <textarea class="form-control" id="profileAdditionalEducation" rows="3" placeholder="Other degrees, certifications, etc."></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- Experience Tab -->
+                            <div class="tab-pane fade" id="experience" role="tabpanel">
+                                <div class="mb-3">
+                                    <label for="profileCompany" class="form-label">Current Company</label>
+                                    <input type="text" class="form-control" id="profileCompany">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="profilePosition" class="form-label">Current Position</label>
+                                    <input type="text" class="form-control" id="profilePosition">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Previous Experience</label>
+                                    <div id="previousExperienceContainer">
+                                        <!-- Previous experience entries will be added here -->
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="addPreviousExperience">
+                                        <i class="fas fa-plus"></i> Add Previous Experience
+                                    </button>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="profileAvailableForMentoring">
+                                    <label class="form-check-label" for="profileAvailableForMentoring">
+                                        Available for Mentoring
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="profileHiring">
+                                    <label class="form-check-label" for="profileHiring">
+                                        Currently Hiring
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Skills Tab -->
+                            <div class="tab-pane fade" id="skills" role="tabpanel">
+                                <div class="mb-3">
+                                    <label for="profileSkillsInput" class="form-label">Skills</label>
+                                    <input type="text" class="form-control" id="profileSkillsInput" placeholder="Add skills separated by commas">
+                                    <div class="form-text">Example: JavaScript, React, Node.js, Project Management</div>
+                                </div>
+                                
+                                <h6 class="mt-4">Social Media Links</h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileLinkedIn" class="form-label">LinkedIn</label>
+                                        <input type="url" class="form-control" id="profileLinkedIn" placeholder="https://linkedin.com/in/username">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileTwitter" class="form-label">Twitter</label>
+                                        <input type="url" class="form-control" id="profileTwitter" placeholder="https://twitter.com/username">
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileGitHub" class="form-label">GitHub</label>
+                                        <input type="url" class="form-control" id="profileGitHub" placeholder="https://github.com/username">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="profileWebsite" class="form-label">Personal Website</label>
+                                        <input type="url" class="form-control" id="profileWebsite" placeholder="https://yourwebsite.com">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="profileVisibility">
+                                    <label class="form-check-label" for="profileVisibility">
+                                        Make my profile visible to other alumni
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="submitProfileBtn">Create Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create an Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="login-form">
+                        <form id="registerForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerEmail" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="registerEmail" placeholder="name@example.com" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="registerPassword" placeholder="Create a password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="collegeName" class="form-label">College/University</label>
+                                <input type="text" class="form-control" id="collegeName" placeholder="Enter your college name" required>
+                                <div class="form-text">Start typing to see suggestions</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="graduationYear" class="form-label">Graduation Year</label>
+                                <select class="form-select" id="graduationYear" required>
+                                    <option value="" selected disabled>Select year</option>
+                                    <option>2020</option>
+                                    <option>2021</option>
+                                    <option>2022</option>
+                                    <option>2023</option>
+                                    <option>2024</option>
+                                    <option>2025</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="branch" class="form-label">Branch/Department</label>
+                                <select class="form-select" id="branch" required>
+                                    <option value="" selected disabled>Select your branch</option>
+                                    <option>Civil Engineering</option>
+                                    <option>Computer Science & Engineering</option>
+                                    <option>Electrical Engineering</option>
+                                    <option>Mechanical Engineering</option>
+                                    <option>Business Administration</option>
+                                    <option>Medical Sciences</option>
+                                    <option>Arts & Humanities</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="termsAgree" required>
+                                <label class="form-check-label" for="termsAgree">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enhanced Alumni Directory with Profile Creation and Personalization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample alumni data (simulating data from database)
+            let alumniData = JSON.parse(localStorage.getItem('alumniData')) || [
+                { 
+                    id: 1,
+                    name: "Rahul Sharma", 
+                    branch: "civil", 
+                    year: "2020", 
+                    company: "L&T Construction",
+                    position: "Project Engineer",
+                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                    college: "IIT Delhi",
+                    degree: "B.Tech Civil Engineering",
+                    email: "rahul.sharma@example.com",
+                    phone: "+91 9876543210",
+                    location: "Mumbai, India",
+                    about: "Experienced project engineer with expertise in infrastructure projects. Skilled in project management and team leadership. Specialized in bridge construction and structural analysis. Currently working on metro rail project in Mumbai.",
+                    skills: ["Project Management", "AutoCAD", "Structural Analysis", "Team Leadership", "Budgeting", "Risk Management"],
+                    experience: [
+                        { company: "L&T Construction", position: "Project Engineer", duration: "2020-Present", description: "Leading a team of 15 engineers for metro rail project" },
+                        { company: "Tata Projects", position: "Site Engineer", duration: "2018-2020", description: "Worked on highway construction project in Gujarat" }
+                    ],
+                    social: {
+                        linkedin: "https://linkedin.com/in/rahulsharma",
+                        twitter: "https://twitter.com/rahulsharma",
+                        github: null,
+                        website: null
+                    },
+                    availableForMentoring: true,
+                    hiring: false,
+                    userId: null,
+                    profileVisibility: true,
+                    connections: [],
+                    profileViews: 42
+                },
+                { 
+                    id: 2,
+                    name: "Priya Patel", 
+                    branch: "cse", 
+                    year: "2021", 
+                    company: "Microsoft",
+                    position: "Senior Software Developer",
+                    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                    college: "Stanford University",
+                    degree: "MS Computer Science",
+                    email: "priya.patel@example.com",
+                    phone: "+1 (555) 123-4567",
+                    location: "Seattle, USA",
+                    about: "Passionate software developer with expertise in cloud computing and distributed systems. Open to mentoring new developers. Currently working on Azure cloud services. Love to contribute to open source projects in my free time.",
+                    skills: ["JavaScript", "React", "Node.js", "AWS", "Python", "Docker", "Kubernetes", "Microservices"],
+                    experience: [
+                        { company: "Microsoft", position: "Senior Software Developer", duration: "2021-Present", description: "Developing cloud infrastructure for Azure services" },
+                        { company: "Google", position: "Software Engineer", duration: "2020-2021", description: "Worked on Google Cloud Platform services" },
+                        { company: "Amazon", position: "Intern", duration: "2019-2020", description: "Worked on AWS Lambda functions" }
+                    ],
+                    social: {
+                        linkedin: "https://linkedin.com/in/priyapatel",
+                        twitter: "https://twitter.com/priyapatel",
+                        github: "https://github.com/priyapatel",
+                        website: "https://priyapatel.dev"
+                    },
+                    availableForMentoring: true,
+                    hiring: false,
+                    userId: null,
+                    profileVisibility: true,
+                    connections: [],
+                    profileViews: 87
+                },
+                { 
+                    id: 3,
+                    name: "Sanjay Mehta", 
+                    branch: "electrical", 
+                    year: "2022", 
+                    company: "Siemens",
+                    position: "Electrical Design Engineer",
+                    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                    college: "MIT",
+                    degree: "M.Eng Electrical Engineering",
+                    email: "sanjay.mehta@example.com",
+                    phone: "+1 (555) 987-6543",
+                    location: "Boston, USA",
+                    about: "Electrical design engineer specializing in power systems and renewable energy solutions. Passionate about sustainable energy and smart grid technologies. Currently researching advanced power distribution systems.",
+                    skills: ["Power Systems", "MATLAB", "Renewable Energy", "Circuit Design", "Smart Grid", "PLC Programming"],
+                    experience: [
+                        { company: "Siemens", position: "Electrical Design Engineer", duration: "2022-Present", description: "Designing power distribution systems for industrial applications" },
+                        { company: "General Electric", position: "Junior Engineer", duration: "2021-2022", description: "Worked on transformer design and testing" }
+                    ],
+                    social: {
+                        linkedin: "https://linkedin.com/in/sanjaymehta",
+                        twitter: null,
+                        github: null,
+                        website: null
+                    },
+                    availableForMentoring: false,
+                    hiring: false,
+                    userId: null,
+                    profileVisibility: true,
+                    connections: [],
+                    profileViews: 29
+                },
+                { 
+                    id: 4,
+                    name: "Amit Kumar", 
+                    branch: "medical", 
+                    year: "2018", 
+                    company: "Apollo Hospitals",
+                    position: "Senior Cardiologist",
+                    image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                    college: "AIIMS Delhi",
+                    degree: "MD Cardiology",
+                    email: "amit.kumar@example.com",
+                    phone: "+91 8765432109",
+                    location: "New Delhi, India",
+                    about: "Senior cardiologist with expertise in interventional cardiology and heart disease prevention. Passionate about patient care and medical research. Published several papers on cardiovascular health in international journals.",
+                    skills: ["Interventional Cardiology", "Echocardiography", "Cardiac Rehabilitation", "Patient Care", "Medical Research"],
+                    experience: [
+                        { company: "Apollo Hospitals", position: "Senior Cardiologist", duration: "2018-Present", description: "Leading cardiac care unit and performing complex heart procedures" },
+                        { company: "Fortis Hospital", position: "Cardiologist", duration: "2015-2018", description: "Worked in cardiology department and OPD services" }
+                    ],
+                    social: {
+                        linkedin: "https://linkedin.com/in/amitkumar",
+                        twitter: "https://twitter.com/amitkumar",
+                        github: null,
+                        website: null
+                    },
+                    availableForMentoring: true,
+                    hiring: false,
+                    userId: null,
+                    profileVisibility: true,
+                    connections: [],
+                    profileViews: 56
+                },
+                { 
+                    id: 5,
+                    name: "Neha Singh", 
+                    branch: "business", 
+                    year: "2019", 
+                    company: "McKinsey & Company",
+                    position: "Senior Business Analyst",
+                    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                    college: "Harvard Business School",
+                    degree: "MBA Business Administration",
+                    email: "neha.singh@example.com",
+                    phone: "+1 (555) 456-7890",
+                    location: "New York, USA",
+                    about: "Senior business analyst with expertise in market research, strategy development, and business transformation. Worked with Fortune 500 companies to optimize operations and drive growth. Passionate about mentoring young professionals.",
+                    skills: ["Market Research", "Business Strategy", "Data Analysis", "Financial Modeling", "Project Management", "Stakeholder Management"],
+                    experience: [
+                        { company: "McKinsey & Company", position: "Senior Business Analyst", duration: "2019-Present", description: "Leading business transformation projects for retail clients" },
+                        { company: "Boston Consulting Group", position: "Business Analyst", duration: "2017-2019", description: "Worked on market entry strategies for technology companies" }
+                    ],
+                    social: {
+                        linkedin: "https://linkedin.com/in/nehasingh",
+                        twitter: "https://twitter.com/nehasingh",
+                        github: null,
+                        website: null
+                    },
+                    availableForMentoring: true,
+                    hiring: true,
+                    userId: null,
+                    profileVisibility: true,
+                    connections: [],
+                    profileViews: 73
+                },
+                { 
+                    id: 6,
+                    name: "Rajesh Khanna", 
+                    branch: "arts", 
+                    year: "2020", 
+                    company: "Freelance",
+                    position: "Graphic Designer & Illustrator",
+                    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                    college: "National Institute of Design",
+                    degree: "B.Des Graphic Design",
+                    email: "rajesh.khanna@example.com",
+                    phone: "+91 7654321098",
+                    location: "Bangalore, India",
+                    about: "Creative graphic designer and illustrator with expertise in brand identity, digital illustrations, and UI/UX design. Worked with various startups and established brands to create compelling visual identities. Passionate about art and design education.",
+                    skills: ["Adobe Creative Suite", "Brand Identity", "UI/UX Design", "Illustration", "Typography", "Web Design"],
+                    experience: [
+                        { company: "Freelance", position: "Graphic Designer & Illustrator", duration: "2020-Present", description: "Working with clients across industries to create visual identities" },
+                        { company: "DesignStudio", position: "Junior Designer", duration: "2018-2020", description: "Worked on branding projects for technology startups" }
+                    ],
+                    social: {
+                        linkedin: "https://linkedin.com/in/rajeshkhanna",
+                        twitter: "https://twitter.com/rajeshkhanna",
+                        github: null,
+                        website: "https://rajeshkhanna.design"
+                    },
+                    availableForMentoring: true,
+                    hiring: false,
+                    userId: null,
+                    profileVisibility: true,
+                    connections: [],
+                    profileViews: 38
+                }
+            ];
+            
+            // Current view and filters
+            let currentView = 'grid';
+            let activeFilters = {
+                branch: [],
+                year: '',
+                location: '',
+                company: '',
+                skills: [],
+                mentoring: false,
+                hiring: false
+            };
+            
+            // Current user state
+            let currentUser = null;
+            let userProfile = null;
+            
+            // Check if user is logged in (from localStorage)
+            function checkLoginStatus() {
+                const userData = localStorage.getItem('currentUser');
+                if (userData) {
+                    currentUser = JSON.parse(userData);
+                    
+                    // Check if user has a profile
+                    const userProfiles = JSON.parse(localStorage.getItem('userProfiles')) || [];
+                    userProfile = userProfiles.find(profile => profile.userId === currentUser.id);
+                    
+                    showApplication();
+                }
+            }
+            
+            // Show the application content
+            function showApplication() {
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('mainApplication').style.display = 'block';
+                
+                updateUIForLoggedInUser();
+                loadFeaturedAlumni();
+                
+                // Show home page by default
+                showPage('home');
+            }
+            
+            // Update UI when user logs in
+            function updateUIForLoggedInUser() {
+                if (currentUser) {
+                    document.getElementById('username').textContent = currentUser.firstName;
+                    document.getElementById('navbarUserImg').src = currentUser.profileImage || 'https://via.placeholder.com/32x32/1a4d8c/ffffff?text=U';
+                    
+                    // Update notification count
+                    updateNotificationCount();
+                    
+                    // Update dashboard stats
+                    updateDashboardStats();
+                }
+            }
+            
+            // Update notification count
+            function updateNotificationCount() {
+                const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+                const userNotifications = notifications.filter(n => n.userId === currentUser.id && !n.read);
+                document.getElementById('notificationCount').textContent = userNotifications.length;
+            }
+            
+            // Update dashboard stats
+            function updateDashboardStats() {
+                if (userProfile) {
+                    document.getElementById('connectionCount').textContent = userProfile.connections ? userProfile.connections.length : 0;
+                    document.getElementById('profileViews').textContent = userProfile.profileViews || 0;
+                }
+                
+                // Load connection suggestions
+                loadConnectionSuggestions();
+                
+                // Load upcoming events
+                loadUpcomingEvents();
+                
+                // Load recent activity
+                loadRecentActivity();
+                
+                // Load job recommendations
+                loadJobRecommendations();
+            }
+            
+            // Initialize the application
+            function initApplication() {
+                // Save alumni data to localStorage
+                localStorage.setItem('alumniData', JSON.stringify(alumniData));
+                
+                checkLoginStatus();
+                setupAuth();
+                setupPageNavigation();
+                setupEventListeners();
+            }
+            
+            // Setup authentication
+            function setupAuth() {
+                // Show register modal
+                document.getElementById('showRegister').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+                    registerModal.show();
+                });
+                
+                // Login form submission
+                document.getElementById('loginForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('loginEmail').value;
+                    const password = document.getElementById('loginPassword').value;
+                    
+                    // Simulate login process
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Signing in...';
+                    
+                    setTimeout(() => {
+                        // For demo purposes, create a user object
+                        currentUser = {
+                            id: Date.now(),
+                            firstName: 'John',
+                            lastName: 'Doe',
+                            email: email,
+                            college: 'Stanford University',
+                            graduationYear: '2020',
+                            branch: 'Computer Science',
+                            profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80'
+                        };
+                        
+                        // Check if user has a profile
+                        const userProfiles = JSON.parse(localStorage.getItem('userProfiles')) || [];
+                        userProfile = userProfiles.find(profile => profile.userId === currentUser.id);
+                        
+                        if (!userProfile) {
+                            // Create a basic profile for the user
+                            userProfile = {
+                                id: Date.now() + 1,
+                                userId: currentUser.id,
+                                name: `${currentUser.firstName} ${currentUser.lastName}`,
+                                branch: currentUser.branch.toLowerCase(),
+                                year: currentUser.graduationYear,
+                                college: currentUser.college,
+                                email: currentUser.email,
+                                image: currentUser.profileImage,
+                                skills: [],
+                                experience: [],
+                                social: {},
+                                availableForMentoring: false,
+                                hiring: false,
+                                profileVisibility: true,
+                                connections: [],
+                                profileViews: 0
+                            };
+                            
+                            userProfiles.push(userProfile);
+                            localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
+                            
+                            // Add to alumni data
+                            alumniData.push(userProfile);
+                            localStorage.setItem('alumniData', JSON.stringify(alumniData));
+                        }
+                        
+                        // Save to localStorage
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        
+                        // Show application
+                        showApplication();
+                        
+                        // Show success message
+                        showToast('Login successful!');
+                        
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                    }, 1500);
+                });
+                
+                // Registration form submission
+                document.getElementById('registerForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get form values
+                    const firstName = document.getElementById('firstName').value;
+                    const lastName = document.getElementById('lastName').value;
+                    const email = document.getElementById('registerEmail').value;
+                    const password = document.getElementById('registerPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    const college = document.getElementById('collegeName').value;
+                    const graduationYear = document.getElementById('graduationYear').value;
+                    const branch = document.getElementById('branch').value;
+                    
+                    // Password confirmation check
+                    if (password !== confirmPassword) {
+                        showToast('Passwords do not match!', 'error');
+                        return;
+                    }
+                    
+                    // Simulate registration process
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Registering...';
+                    
+                    setTimeout(() => {
+                        // Create user object
+                        currentUser = {
+                            id: Date.now(),
+                            firstName: firstName,
+                            lastName: lastName,
+                            email: email,
+                            college: college,
+                            graduationYear: graduationYear,
+                            branch: branch,
+                            profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80'
+                        };
+                        
+                        // Create a basic profile for the user
+                        userProfile = {
+                            id: Date.now() + 1,
+                            userId: currentUser.id,
+                            name: `${currentUser.firstName} ${currentUser.lastName}`,
+                            branch: currentUser.branch.toLowerCase(),
+                            year: currentUser.graduationYear,
+                            college: currentUser.college,
+                            email: currentUser.email,
+                            image: currentUser.profileImage,
+                            skills: [],
+                            experience: [],
+                            social: {},
+                            availableForMentoring: false,
+                            hiring: false,
+                            profileVisibility: true,
+                            connections: [],
+                            profileViews: 0
+                        };
+                        
+                        // Save user profiles
+                        const userProfiles = JSON.parse(localStorage.getItem('userProfiles')) || [];
+                        userProfiles.push(userProfile);
+                        localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
+                        
+                        // Add to alumni data
+                        alumniData.push(userProfile);
+                        localStorage.setItem('alumniData', JSON.stringify(alumniData));
+                        
+                        // Save to localStorage
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        
+                        // Hide modal
+                        bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+                        
+                        // Show application
+                        showApplication();
+                        
+                        // Show success message
+                        showToast('Registration successful! Welcome to Alumni Connect.');
+                        
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                    }, 1500);
+                });
+                
+                // Logout functionality
+                document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Clear user data
+                    localStorage.removeItem('currentUser');
+                    currentUser = null;
+                    userProfile = null;
+                    
+                    // Show login screen
+                    document.getElementById('authContainer').style.display = 'flex';
+                    document.getElementById('mainApplication').style.display = 'none';
+                    
+                    // Show success message
+                    showToast('You have been logged out successfully.');
+                });
+            }
+            
+            // Load featured alumni on home page
+            function loadFeaturedAlumni() {
+                const container = document.getElementById('featuredAlumni');
+                container.innerHTML = '';
+                
+                // Get 3 random alumni for featured section
+                const featuredAlumni = [...alumniData].sort(() => 0.5 - Math.random()).slice(0, 3);
+                
+                featuredAlumni.forEach(alumni => {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-4 mb-4';
+                    
+                    col.innerHTML = `
+                        <div class="card alumni-card ${alumni.branch} h-100">
+                            <div class="card-body text-center">
+                                <img src="${alumni.image}" alt="${alumni.name}" class="alumni-img mb-3">
+                                <span class="branch-badge">${getBranchName(alumni.branch)}</span>
+                                <h5 class="card-title">${alumni.name}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">${alumni.position || 'Alumni'} at ${alumni.company || alumni.college}</h6>
+                                <p class="card-text small">${alumni.college}, ${alumni.year}</p>
+                                
+                                <div class="social-links mb-3">
+                                    ${alumni.social && alumni.social.linkedin ? `<a href="${alumni.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ''}
+                                    ${alumni.social && alumni.social.twitter ? `<a href="${alumni.social.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>` : ''}
+                                </div>
+                                
+                                <button class="btn btn-outline-primary btn-sm view-profile" data-id="${alumni.id}">
+                                    View Profile
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(col);
+                });
+                
+                // Add event listeners to view profile buttons
+                document.querySelectorAll('.view-profile').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const alumniId = this.getAttribute('data-id');
+                        showAlumniDetails(alumniId);
+                    });
+                });
+            }
+            
+            // Load alumni data into the directory page
+            function loadAlumniData() {
+                const container = document.getElementById('alumniContainer');
+                container.innerHTML = '';
+                
+                // Apply filters
+                let filteredAlumni = alumniData.filter(alumni => {
+                    // Skip if profile is not visible
+                    if (!alumni.profileVisibility) return false;
+                    
+                    // Branch filter
+                    if (activeFilters.branch.length > 0 && !activeFilters.branch.includes(alumni.branch)) {
+                        return false;
+                    }
+                    
+                    // Year filter
+                    if (activeFilters.year && alumni.year !== activeFilters.year) {
+                        return false;
+                    }
+                    
+                    // Location filter
+                    if (activeFilters.location && !alumni.location.toLowerCase().includes(activeFilters.location.toLowerCase())) {
+                        return false;
+                    }
+                    
+                    // Company filter
+                    if (activeFilters.company && !alumni.company.toLowerCase().includes(activeFilters.company.toLowerCase())) {
+                        return false;
+                    }
+                    
+                    // Skills filter
+                    if (activeFilters.skills.length > 0) {
+                        const hasSkill = activeFilters.skills.some(skill => 
+                            alumni.skills.some(s => s.toLowerCase().includes(skill.toLowerCase()))
+                        );
+                        if (!hasSkill) return false;
+                    }
+                    
+                    // Mentoring filter
+                    if (activeFilters.mentoring && !alumni.availableForMentoring) {
+                        return false;
+                    }
+                    
+                    // Hiring filter
+                    if (activeFilters.hiring && !alumni.hiring) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+                
+                // Display message if no results
+                if (filteredAlumni.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+                            <h4>No alumni found</h4>
+                            <p class="text-muted">Try adjusting your filters or search query</p>
+                            <button class="btn btn-primary mt-2" id="resetFiltersBtn">Reset All Filters</button>
+                        </div>
+                    `;
+                    
+                    document.getElementById('resetFiltersBtn').addEventListener('click', resetAllFilters);
+                    return;
+                }
+                
+                // Render alumni cards
+                filteredAlumni.forEach(alumni => {
+                    const isConnected = userProfile && userProfile.connections && userProfile.connections.includes(alumni.id);
+                    
+                    const card = document.createElement('div');
+                    card.className = `col-md-6 col-lg-4 mb-4 alumni-item ${currentView === 'list' ? 'd-flex' : ''}`;
+                    
+                    card.innerHTML = `
+                        <div class="card alumni-card ${alumni.branch} ${currentView === 'list' ? 'flex-row' : ''}">
+                            ${isConnected ? '<span class="connection-status">Connected</span>' : ''}
+                            
+                            ${currentView === 'list' ? `
+                                <div class="col-4">
+                                    <img src="${alumni.image}" alt="${alumni.name}" class="card-img-top rounded-start" style="height: 100%; object-fit: cover;">
+                                </div>
+                                <div class="col-8">
+                            ` : ''}
+                            
+                            <div class="card-body ${currentView === 'list' ? 'py-2' : 'text-center'}">
+                                ${currentView === 'grid' ? `
+                                    <img src="${alumni.image}" alt="${alumni.name}" class="alumni-img mb-3">
+                                ` : ''}
+                                
+                                <span class="branch-badge">${getBranchName(alumni.branch)}</span>
+                                
+                                <h5 class="card-title ${currentView === 'list' ? 'h6' : ''}">${alumni.name}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">${alumni.position || 'Alumni'} at ${alumni.company || alumni.college}</h6>
+                                
+                                <p class="card-text small ${currentView === 'grid' ? 'd-none' : ''}">${alumni.college}, ${alumni.year}</p>
+                                
+                                <div class="social-links mb-2">
+                                    ${alumni.social && alumni.social.linkedin ? `<a href="${alumni.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ''}
+                                    ${alumni.social && alumni.social.twitter ? `<a href="${alumni.social.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>` : ''}
+                                    ${alumni.social && alumni.social.github ? `<a href="${alumni.social.github}" target="_blank"><i class="fab fa-github"></i></a>` : ''}
+                                    ${alumni.social && alumni.social.website ? `<a href="${alumni.social.website}" target="_blank"><i class="fas fa-globe"></i></a>` : ''}
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-outline-primary btn-sm view-profile" data-id="${alumni.id}">
+                                        View Profile
+                                    </button>
+                                    ${!isConnected ? `
+                                        <button class="btn btn-outline-secondary btn-sm connect-btn" data-id="${alumni.id}">
+                                            <i class="fas fa-link"></i>
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            
+                            ${currentView === 'list' ? '</div>' : ''}
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+                
+                // Add event listeners to view profile buttons
+                document.querySelectorAll('.view-profile').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const alumniId = this.getAttribute('data-id');
+                        showAlumniDetails(alumniId);
+                    });
+                });
+                
+                // Add event listeners to connect buttons
+                document.querySelectorAll('.connect-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const alumniId = this.getAttribute('data-id');
+                        sendConnectionRequest(alumniId);
+                    });
+                });
+            }
+            
+            // Send connection request
+            function sendConnectionRequest(alumniId) {
+                if (!currentUser) {
+                    showToast('Please log in to send connection requests', 'error');
+                    return;
+                }
+                
+                const alumni = alumniData.find(a => a.id == alumniId);
+                if (!alumni) return;
+                
+                // Create notification
+                const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+                notifications.push({
+                    id: Date.now(),
+                    userId: alumni.userId || alumni.id,
+                    type: 'connection_request',
+                    message: `${currentUser.firstName} ${currentUser.lastName} wants to connect with you`,
+                    timestamp: new Date().toISOString(),
+                    read: false,
+                    relatedUserId: currentUser.id
+                });
+                
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                
+                showToast(`Connection request sent to ${alumni.name}`);
+            }
+            
+            // Get branch name from branch key
+            function getBranchName(branchKey) {
+                const branches = {
+                    'civil': 'Civil Eng',
+                    'cse': 'Computer Science',
+                    'electrical': 'Electrical Eng',
+                    'mechanical': 'Mechanical Eng',
+                    'business': 'Business',
+                    'medical': 'Medical',
+                    'arts': 'Arts & Design'
+                };
+                return branches[branchKey] || branchKey;
+            }
+            
+            // Get branch color from branch key
+            function getBranchColor(branchKey) {
+                const colors = {
+                    'civil': 'var(--civil)',
+                    'cse': 'var(--cse)',
+                    'electrical': 'var(--electrical)',
+                    'mechanical': 'var(--mechanical)',
+                    'business': 'var(--business)',
+                    'medical': 'var(--medical)',
+                    'arts': 'var(--arts)'
+                };
+                return colors[branchKey] || 'var(--primary)';
+            }
+            
+            // Show alumni details in modal
+            function showAlumniDetails(alumniId) {
+                const alumni = alumniData.find(a => a.id == alumniId);
+                if (!alumni) return;
+                
+                // Set modal content
+                document.getElementById('alumniName').textContent = alumni.name;
+                document.getElementById('modalAlumniImg').src = alumni.image;
+                document.getElementById('modalBranchBadge').textContent = getBranchName(alumni.branch);
+                document.getElementById('modalBranchBadge').style.backgroundColor = getBranchColor(alumni.branch);
+                document.getElementById('modalAbout').textContent = alumni.about || 'No information available';
+                document.getElementById('modalEmail').textContent = alumni.email || 'Not provided';
+                document.getElementById('modalPhone').textContent = alumni.phone || 'Not provided';
+                document.getElementById('modalLocation').textContent = alumni.location || 'Not provided';
+                document.getElementById('modalDegree').textContent = alumni.degree || 'Not provided';
+                document.getElementById('modalCollege').textContent = alumni.college || 'Not provided';
+                document.getElementById('modalYear').textContent = alumni.year || 'Not provided';
+                
+                // Set social links
+                const socialLinksContainer = document.getElementById('modalSocialLinks');
+                socialLinksContainer.innerHTML = '';
+                
+                if (alumni.social && alumni.social.linkedin) {
+                    socialLinksContainer.innerHTML += `<a href="${alumni.social.linkedin}" target="_blank"><i class="fab fa-linkedin fa-lg"></i></a>`;
+                }
+                if (alumni.social && alumni.social.twitter) {
+                    socialLinksContainer.innerHTML += `<a href="${alumni.social.twitter}" target="_blank"><i class="fab fa-twitter fa-lg"></i></a>`;
+                }
+                if (alumni.social && alumni.social.github) {
+                    socialLinksContainer.innerHTML += `<a href="${alumni.social.github}" target="_blank"><i class="fab fa-github fa-lg"></i></a>`;
+                }
+                if (alumni.social && alumni.social.website) {
+                    socialLinksContainer.innerHTML += `<a href="${alumni.social.website}" target="_blank"><i class="fas fa-globe fa-lg"></i></a>`;
+                }
+                
+                // Set experience
+                const experienceContainer = document.getElementById('modalExperience');
+                experienceContainer.innerHTML = '';
+                
+                if (alumni.experience && alumni.experience.length > 0) {
+                    alumni.experience.forEach(exp => {
+                        experienceContainer.innerHTML += `
+                            <div class="d-flex justify-content-between align-items-start py-2 border-bottom">
+                                <div>
+                                    <h6 class="mb-0">${exp.position}</h6>
+                                    <p class="mb-0 text-muted">${exp.company}</p>
+                                    <p class="mb-0 small">${exp.description}</p>
+                                </div>
+                                <span class="text-muted">${exp.duration}</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    experienceContainer.innerHTML = '<p class="text-muted">No experience information available</p>';
+                }
+                
+                // Set skills
+                const skillsContainer = document.getElementById('modalSkills');
+                skillsContainer.innerHTML = '';
+                
+                if (alumni.skills && alumni.skills.length > 0) {
+                    alumni.skills.forEach(skill => {
+                        skillsContainer.innerHTML += `<span class="skill-badge">${skill}</span>`;
+                    });
+                } else {
+                    skillsContainer.innerHTML = '<p class="text-muted">No skills information available</p>';
+                }
+                
+                // Set up connection button
+                const isConnected = userProfile && userProfile.connections && userProfile.connections.includes(alumni.id);
+                const modalConnectBtn = document.getElementById('modalConnectBtn');
+                
+                if (isConnected) {
+                    modalConnectBtn.innerHTML = '<i class="fas fa-check"></i> Connected';
+                    modalConnectBtn.disabled = true;
+                    modalConnectBtn.classList.remove('btn-outline-primary');
+                    modalConnectBtn.classList.add('btn-success');
+                } else {
+                    modalConnectBtn.innerHTML = '<i class="fas fa-link"></i> Connect';
+                    modalConnectBtn.disabled = false;
+                    modalConnectBtn.classList.remove('btn-success');
+                    modalConnectBtn.classList.add('btn-outline-primary');
+                    modalConnectBtn.onclick = function() {
+                        sendConnectionRequest(alumni.id);
+                        bootstrap.Modal.getInstance(document.getElementById('profileModal')).hide();
+                    };
+                }
+                
+                // Set up message button
+                document.getElementById('modalMessageBtn').onclick = function() {
+                    if (!currentUser) {
+                        showToast('Please log in to send messages', 'error');
+                        return;
+                    }
+                    
+                    if (!isConnected) {
+                        showToast('You need to connect before sending messages', 'error');
+                        return;
+                    }
+                    
+                    showToast('Message feature coming soon!');
+                };
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('profileModal'));
+                modal.show();
+                
+                // Increment profile views
+                if (alumni.userId && alumni.userId !== currentUser.id) {
+                    alumni.profileViews = (alumni.profileViews || 0) + 1;
+                    localStorage.setItem('alumniData', JSON.stringify(alumniData));
+                }
+            }
+            
+            // Setup page navigation
+            function setupPageNavigation() {
+                document.querySelectorAll('[data-page]').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const pageId = this.getAttribute('data-page');
+                        showPage(pageId);
+                    });
+                });
+            }
+            
+            // Show specific page
+            function showPage(pageId) {
+                // Hide all pages
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.add('d-none');
+                });
+                
+                // Show selected page
+                document.getElementById(`${pageId}-page`).classList.remove('d-none');
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                
+                document.querySelectorAll(`[data-page="${pageId}"]`).forEach(link => {
+                    link.classList.add('active');
+                });
+                
+                // Load data for specific pages
+                if (pageId === 'directory') {
+                    loadAlumniData();
+                } else if (pageId === 'dashboard') {
+                    updateDashboardStats();
+                } else if (pageId === 'connections') {
+                    loadConnections();
+                } else if (pageId === 'profile') {
+                    loadUserProfile();
+                }
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+            
+            // Load user profile
+            function loadUserProfile() {
+                if (!userProfile) return;
+                
+                document.getElementById('profileUserName').textContent = userProfile.name;
+                document.getElementById('profileUserTitle').textContent = userProfile.position ? `${userProfile.position} at ${userProfile.company}` : 'Alumni';
+                document.getElementById('profileAbout').textContent = userProfile.about || 'No information available. Click edit to update your profile.';
+                
+                // Load experience
+                const experienceContainer = document.getElementById('profileExperience');
+                experienceContainer.innerHTML = '';
+                
+                if (userProfile.experience && userProfile.experience.length > 0) {
+                    userProfile.experience.forEach(exp => {
+                        experienceContainer.innerHTML += `
+                            <div class="d-flex justify-content-between align-items-start py-2 border-bottom">
+                                <div>
+                                    <h6 class="mb-0">${exp.position}</h6>
+                                    <p class="mb-0 text-muted">${exp.company}</p>
+                                    <p class="mb-0 small">${exp.description}</p>
+                                </div>
+                                <span class="text-muted">${exp.duration}</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    experienceContainer.innerHTML = '<p class="text-muted">No experience information added</p>';
+                }
+                
+                // Load education
+                const educationContainer = document.getElementById('profileEducation');
+                educationContainer.innerHTML = '';
+                
+                if (userProfile.college) {
+                    educationContainer.innerHTML += `
+                        <div class="d-flex justify-content-between align-items-start py-2 border-bottom">
+                            <div>
+                                <h6 class="mb-0">${userProfile.degree || 'Degree'}</h6>
+                                <p class="mb-0 text-muted">${userProfile.college}</p>
+                            </div>
+                            <span class="text-muted">${userProfile.year}</span>
+                        </div>
+                    `;
+                } else {
+                    educationContainer.innerHTML = '<p class="text-muted">No education information added</p>';
+                }
+                
+                // Load skills
+                const skillsContainer = document.getElementById('profileSkills');
+                skillsContainer.innerHTML = '';
+                
+                if (userProfile.skills && userProfile.skills.length > 0) {
+                    userProfile.skills.forEach(skill => {
+                        skillsContainer.innerHTML += `<span class="skill-badge">${skill}</span>`;
+                    });
+                } else {
+                    skillsContainer.innerHTML = '<p class="text-muted">No skills added</p>';
+                }
+            }
+            
+            // Load connections
+            function loadConnections() {
+                const container = document.getElementById('connectionsContainer');
+                container.innerHTML = '';
+                
+                if (!userProfile || !userProfile.connections || userProfile.connections.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-users fa-3x mb-3 text-muted"></i>
+                            <h4>No connections yet</h4>
+                            <p class="text-muted">Connect with other alumni to build your network</p>
+                            <button class="btn btn-primary mt-2" data-page="directory">Browse Alumni</button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                userProfile.connections.forEach(connectionId => {
+                    const alumni = alumniData.find(a => a.id === connectionId);
+                    if (!alumni) return;
+                    
+                    const col = document.createElement('div');
+                    col.className = 'col-md-6 col-lg-4 mb-4';
+                    
+                    col.innerHTML = `
+                        <div class="card alumni-card ${alumni.branch} h-100">
+                            <span class="connection-status">Connected</span>
+                            <div class="card-body text-center">
+                                <img src="${alumni.image}" alt="${alumni.name}" class="alumni-img mb-3">
+                                <span class="branch-badge">${getBranchName(alumni.branch)}</span>
+                                <h5 class="card-title">${alumni.name}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">${alumni.position || 'Alumni'} at ${alumni.company || alumni.college}</h6>
+                                <p class="card-text small">${alumni.college}, ${alumni.year}</p>
+                                
+                                <div class="social-links mb-3">
+                                    ${alumni.social && alumni.social.linkedin ? `<a href="${alumni.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ''}
+                                    ${alumni.social && alumni.social.twitter ? `<a href="${alumni.social.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>` : ''}
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-outline-primary btn-sm view-profile" data-id="${alumni.id}">
+                                        View Profile
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-envelope"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(col);
+                });
+                
+                // Add event listeners to view profile buttons
+                document.querySelectorAll('.view-profile').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const alumniId = this.getAttribute('data-id');
+                        showAlumniDetails(alumniId);
+                    });
+                });
+            }
+            
+            // Load connection suggestions
+            function loadConnectionSuggestions() {
+                const container = document.getElementById('connectionSuggestions');
+                container.innerHTML = '';
+                
+                if (!userProfile) return;
+                
+                // Get alumni from same branch or college
+                const suggestions = alumniData.filter(alumni => {
+                    // Exclude current user and existing connections
+                    if (alumni.userId === currentUser.id) return false;
+                    if (userProfile.connections && userProfile.connections.includes(alumni.id)) return false;
+                    
+                    // Suggest based on same branch or college
+                    return alumni.branch === userProfile.branch || alumni.college === userProfile.college;
+                }).slice(0, 3);
+                
+                if (suggestions.length === 0) {
+                    container.innerHTML = '<p class="text-muted">No suggestions available</p>';
+                    return;
+                }
+                
+                suggestions.forEach(alumni => {
+                    const div = document.createElement('div');
+                    div.className = 'd-flex align-items-start mb-3';
+                    
+                    div.innerHTML = `
+                        <img src="${alumni.image}" class="rounded-circle me-3" width="40" height="40" alt="${alumni.name}">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">${alumni.name}</h6>
+                            <p class="text-muted mb-0 small">${alumni.position || 'Alumni'} at ${alumni.company || alumni.college}</p>
+                            <p class="small mb-0">${alumni.college}, ${alumni.year}</p>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary connect-btn" data-id="${alumni.id}">
+                            <i class="fas fa-link"></i>
+                        </button>
+                    `;
+                    
+                    container.appendChild(div);
+                });
+                
+                // Add event listeners to connect buttons
+                document.querySelectorAll('.connect-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const alumniId = this.getAttribute('data-id');
+                        sendConnectionRequest(alumniId);
+                    });
+                });
+            }
+            
+            // Load upcoming events
+            function loadUpcomingEvents() {
+                const container = document.getElementById('upcomingEvents');
+                container.innerHTML = '';
+                
+                // Sample events
+                const events = [
+                    { name: 'Annual Alumni Meet 2023', date: 'Sept 15, 2023', location: 'Virtual Event' },
+                    { name: 'Industry-Academia Conclave', date: 'Oct 28, 2023', location: 'New York, USA' },
+                    { name: 'Tech Innovation Summit', date: 'Nov 12, 2023', location: 'San Francisco, USA' }
+                ];
+                
+                events.forEach(event => {
+                    const div = document.createElement('div');
+                    div.className = 'd-flex align-items-start mb-3';
+                    
+                    div.innerHTML = `
+                        <div class="bg-primary text-white rounded p-2 me-3">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">${event.name}</h6>
+                            <p class="text-muted mb-0 small">${event.date} • ${event.location}</p>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    `;
+                    
+                    container.appendChild(div);
+                });
+            }
+            
+            // Load recent activity
+            function loadRecentActivity() {
+                const container = document.getElementById('recentActivity');
+                container.innerHTML = '';
+                
+                // Sample activity
+                const activities = [
+                    { user: 'Rahul Sharma', action: 'updated his profile', time: '2 hours ago' },
+                    { user: 'Priya Patel', action: 'posted a new job opportunity', time: '5 hours ago' },
+                    { user: 'Sanjay Mehta', action: 'registered for the upcoming event', time: 'Yesterday' }
+                ];
+                
+                activities.forEach(activity => {
+                    const div = document.createElement('div');
+                    div.className = 'd-flex align-items-start mb-3';
+                    
+                    div.innerHTML = `
+                        <div class="bg-light rounded p-2 me-3">
+                            <i class="fas fa-user text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="mb-0">${activity.user} ${activity.action}</p>
+                            <p class="text-muted mb-0 small">${activity.time}</p>
+                        </div>
+                    `;
+                    
+                    container.appendChild(div);
+                });
+            }
+            
+            // Load job recommendations
+            function loadJobRecommendations() {
+                const container = document.getElementById('jobRecommendations');
+                container.innerHTML = '';
+                
+                // Sample jobs
+                const jobs = [
+                    { title: 'Software Development Engineer', company: 'Amazon', postedBy: 'Neha Verma' },
+                    { title: 'Civil Project Manager', company: 'Shapoorji Pallonji', postedBy: 'Amit Shah' },
+                    { title: 'Data Scientist', company: 'Google', postedBy: 'Rajesh Kumar' }
+                ];
+                
+                jobs.forEach(job => {
+                    const div = document.createElement('div');
+                    div.className = 'mb-3';
+                    
+                    div.innerHTML = `
+                        <h6 class="mb-0">${job.title}</h6>
+                        <p class="text-muted mb-0">${job.company} • Posted by: ${job.postedBy}</p>
+                        <button class="btn btn-sm btn-outline-primary mt-1">Apply Now</button>
+                    `;
+                    
+                    container.appendChild(div);
+                });
+            }
+            
+            // Setup event listeners
+            function setupEventListeners() {
+                // Advanced search toggle
+                document.getElementById('advancedSearchToggle').addEventListener('click', function() {
+                    const tools = document.getElementById('advancedSearchTools');
+                    tools.classList.toggle('d-none');
+                    this.innerHTML = tools.classList.contains('d-none') ? 
+                        '<i class="fas fa-sliders-h"></i> Advanced Search' : 
+                        '<i class="fas fa-times"></i> Close Search';
+                });
+                
+                // Apply filters button
+                document.getElementById('applyFilters').addEventListener('click', function() {
+                    // Get filter values
+                    activeFilters.branch = [document.getElementById('branchFilter').value].filter(Boolean);
+                    activeFilters.year = document.getElementById('yearFilter').value;
+                    activeFilters.location = document.getElementById('locationFilter').value;
+                    activeFilters.company = document.getElementById('companyFilter').value;
+                    activeFilters.skills = Array.from(document.getElementById('skillsFilter').selectedOptions).map(opt => opt.value);
+                    activeFilters.mentoring = document.getElementById('availableForMentoring').checked;
+                    activeFilters.hiring = document.getElementById('hiring').checked;
+                    
+                    updateActiveFiltersDisplay();
+                    loadAlumniData();
+                    
+                    // Show toast notification
+                    showToast('Filters applied successfully');
+                });
+                
+                // Clear filters button
+                document.getElementById('clearFilters').addEventListener('click', resetAllFilters);
+                
+                // Quick filters
+                document.getElementById('applyQuickFilters').addEventListener('click', function() {
+                    // Get selected branches
+                    activeFilters.branch = Array.from(document.querySelectorAll('.branch-filter:checked')).map(cb => cb.value);
+                    
+                    // Get other filters
+                    activeFilters.year = document.getElementById('yearQuickFilter').value;
+                    activeFilters.location = document.getElementById('locationQuickFilter').value;
+                    
+                    updateActiveFiltersDisplay();
+                    loadAlumniData();
+                    
+                    // Show toast notification
+                    showToast('Filters applied successfully');
+                });
+                
+                // Search input
+                document.getElementById('searchButton').addEventListener('click', performSearch);
+                document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+                
+                // View options
+                document.querySelectorAll('.view-option').forEach(option => {
+                    option.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // Update active view
+                        document.querySelectorAll('.view-option').forEach(opt => opt.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        currentView = this.getAttribute('data-view');
+                        loadAlumniData();
+                    });
+                });
+                
+                // Add profile button
+                document.getElementById('addProfileBtn').addEventListener('click', function() {
+                    if (!currentUser) {
+                        showToast('Please log in to add a profile', 'error');
+                        return;
+                    }
+                    
+                    const addProfileModal = new bootstrap.Modal(document.getElementById('addProfileModal'));
+                    addProfileModal.show();
+                });
+                
+                // Submit profile button
+                document.getElementById('submitProfileBtn').addEventListener('click', function() {
+                    // Get form values
+                    const firstName = document.getElementById('profileFirstName').value;
+                    const lastName = document.getElementById('profileLastName').value;
+                    const email = document.getElementById('profileEmail').value;
+                    const phone = document.getElementById('profilePhone').value;
+                    const location = document.getElementById('profileLocation').value;
+                    const branch = document.getElementById('profileBranch').value;
+                    const about = document.getElementById('profileAbout').value;
+                    const image = document.getElementById('profileImage').value;
+                    const college = document.getElementById('profileCollege').value;
+                    const degree = document.getElementById('profileDegree').value;
+                    const graduationYear = document.getElementById('profileGraduationYear').value;
+                    const company = document.getElementById('profileCompany').value;
+                    const position = document.getElementById('profilePosition').value;
+                    const availableForMentoring = document.getElementById('profileAvailableForMentoring').checked;
+                    const hiring = document.getElementById('profileHiring').checked;
+                    const skills = document.getElementById('profileSkillsInput').value.split(',').map(s => s.trim()).filter(Boolean);
+                    const linkedin = document.getElementById('profileLinkedIn').value;
+                    const twitter = document.getElementById('profileTwitter').value;
+                    const github = document.getElementById('profileGitHub').value;
+                    const website = document.getElementById('profileWebsite').value;
+                    const visibility = document.getElementById('profileVisibility').checked;
+                    
+                    // Validate required fields
+                    if (!firstName || !lastName || !email || !branch || !college || !degree || !graduationYear) {
+                        showToast('Please fill in all required fields', 'error');
+                        return;
+                    }
+                    
+                    // Create alumni profile
+                    const newProfile = {
+                        id: Date.now(),
+                        userId: currentUser.id,
+                        name: `${firstName} ${lastName}`,
+                        branch: branch,
+                        year: graduationYear,
+                        company: company,
+                        position: position,
+                        image: image || 'https://via.placeholder.com/200/1a4d8c/ffffff?text=Profile',
+                        college: college,
+                        degree: degree,
+                        email: email,
+                        phone: phone,
+                        location: location,
+                        about: about,
+                        skills: skills,
+                        experience: [], // Would be populated from the experience tab in a real implementation
+                        social: {
+                            linkedin: linkedin,
+                            twitter: twitter,
+                            github: github,
+                            website: website
+                        },
+                        availableForMentoring: availableForMentoring,
+                        hiring: hiring,
+                        profileVisibility: visibility,
+                        connections: [],
+                        profileViews: 0
+                    };
+                    
+                    // Add to alumni data
+                    alumniData.push(newProfile);
+                    localStorage.setItem('alumniData', JSON.stringify(alumniData));
+                    
+                    // Update user profile
+                    userProfile = newProfile;
+                    const userProfiles = JSON.parse(localStorage.getItem('userProfiles')) || [];
+                    userProfiles.push(newProfile);
+                    localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
+                    
+                    // Hide modal
+                    bootstrap.Modal.getInstance(document.getElementById('addProfileModal')).hide();
+                    
+                    // Show success message
+                    showToast('Profile created successfully!');
+                    
+                    // Reload alumni data if on directory page
+                    if (document.getElementById('directory-page').classList.contains('d-none') === false) {
+                        loadAlumniData();
+                    }
+                });
+            }
+            
+            // Perform search
+            function performSearch() {
+                const query = document.getElementById('searchInput').value.toLowerCase().trim();
+                
+                if (!query) {
+                    loadAlumniData();
+                    return;
+                }
+                
+                // Filter alumni based on search query
+                const filteredAlumni = alumniData.filter(alumni => {
+                    return (
+                        alumni.name.toLowerCase().includes(query) ||
+                        (alumni.company && alumni.company.toLowerCase().includes(query)) ||
+                        (alumni.position && alumni.position.toLowerCase().includes(query)) ||
+                        (alumni.skills && alumni.skills.some(skill => skill.toLowerCase().includes(query))) ||
+                        alumni.college.toLowerCase().includes(query)
+                    );
+                });
+                
+                // Display results
+                const container = document.getElementById('alumniContainer');
+                container.innerHTML = '';
+                
+                if (filteredAlumni.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+                            <h4>No results found for "${query}"</h4>
+                            <p class="text-muted">Try different search terms</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Render search results
+                filteredAlumni.forEach(alumni => {
+                    const isConnected = userProfile && userProfile.connections && userProfile.connections.includes(alumni.id);
+                    
+                    const card = document.createElement('div');
+                    card.className = `col-md-6 col-lg-4 mb-4 alumni-item`;
+                    
+                    card.innerHTML = `
+                        <div class="card alumni-card ${alumni.branch}">
+                            ${isConnected ? '<span class="connection-status">Connected</span>' : ''}
+                            <div class="card-body text-center">
+                                <img src="${alumni.image}" alt="${alumni.name}" class="alumni-img mb-3">
+                                <span class="branch-badge">${getBranchName(alumni.branch)}</span>
+                                <h5 class="card-title">${alumni.name}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">${alumni.position || 'Alumni'} at ${alumni.company || alumni.college}</h6>
+                                
+                                <div class="social-links mb-2">
+                                    ${alumni.social && alumni.social.linkedin ? `<a href="${alumni.social.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>` : ''}
+                                    ${alumni.social && alumni.social.twitter ? `<a href="${alumni.social.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>` : ''}
+                                </div>
+                                
+                                <button class="btn btn-outline-primary btn-sm view-profile" data-id="${alumni.id}">
+                                    View Profile
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+                
+                // Add event listeners to view profile buttons
+                document.querySelectorAll('.view-profile').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const alumniId = this.getAttribute('data-id');
+                        showAlumniDetails(alumniId);
+                    });
+                });
+                
+                // Show toast notification
+                showToast(`Found ${filteredAlumni.length} results for "${query}"`);
+            }
+            
+            // Update active filters display
+            function updateActiveFiltersDisplay() {
+                const container = document.getElementById('activeFilters');
+                container.innerHTML = '';
+                
+                // Branch filters
+                activeFilters.branch.forEach(branch => {
+                    container.innerHTML += `<span class="badge bg-primary me-1">${getBranchName(branch)}</span>`;
+                });
+                
+                // Year filter
+                if (activeFilters.year) {
+                    container.innerHTML += `<span class="badge bg-info me-1">Year: ${activeFilters.year}</span>`;
+                }
+                
+                // Location filter
+                if (activeFilters.location) {
+                    container.innerHTML += `<span class="badge bg-warning me-1">Location: ${activeFilters.location}</span>`;
+                }
+                
+                // Company filter
+                if (activeFilters.company) {
+                    container.innerHTML += `<span class="badge bg-success me-1">Company: ${activeFilters.company}</span>`;
+                }
+                
+                // Skills filters
+                activeFilters.skills.forEach(skill => {
+                    container.innerHTML += `<span class="badge bg-secondary me-1">Skill: ${skill}</span>`;
+                });
+                
+                // Mentoring filter
+                if (activeFilters.mentoring) {
+                    container.innerHTML += `<span class="badge bg-dark me-1">Available for Mentoring</span>`;
+                }
+                
+                // Hiring filter
+                if (activeFilters.hiring) {
+                    container.innerHTML += `<span class="badge bg-danger me-1">Currently Hiring</span>`;
+                }
+            }
+            
+            // Reset all filters
+            function resetAllFilters() {
+                activeFilters = {
+                    branch: [],
+                    year: '',
+                    location: '',
+                    company: '',
+                    skills: [],
+                    mentoring: false,
+                    hiring: false
+                };
+                
+                // Reset form elements
+                document.querySelectorAll('.branch-filter').forEach(cb => cb.checked = false);
+                document.getElementById('yearFilter').value = '';
+                document.getElementById('locationFilter').value = '';
+                document.getElementById('companyFilter').value = '';
+                document.getElementById('skillsFilter').selectedIndex = -1;
+                document.getElementById('availableForMentoring').checked = false;
+                document.getElementById('hiring').checked = false;
+                
+                document.getElementById('yearQuickFilter').value = '';
+                document.getElementById('locationQuickFilter').value = '';
+                
+                updateActiveFiltersDisplay();
+                loadAlumniData();
+                
+                // Show toast notification
+                showToast('All filters cleared');
+            }
+            
+            // Show toast notification
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <div class="toast-body">
+                        <div class="d-flex justify-content-between">
+                            <div>${message}</div>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('.toast-container').appendChild(toast);
+                
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+                
+                // Remove toast after it hides
+                toast.addEventListener('hidden.bs.toast', () => {
+                    toast.remove();
+                });
+            }
+            
+            // Initialize the application
+            initApplication();
+        });
+    </script>
+</body>
+</html>
