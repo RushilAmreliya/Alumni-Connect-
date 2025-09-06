@@ -1,0 +1,2593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Connect Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a4d8c;
+            --secondary: #ff6b35;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --civil: #3498db;
+            --cse: #9b59b6;
+            --electrical: #e74c3c;
+            --mechanical: #f39c12;
+            --business: #2ecc71;
+            --medical: #e84393;
+            --arts: #00cec9;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+        
+        /* Auth Styles */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #2c6cb0 100%);
+            padding: 20px;
+        }
+        
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .auth-header {
+            background: var(--primary);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .auth-body {
+            background: white;
+            padding: 30px;
+        }
+        
+        .auth-footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        
+        .auth-switch {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Main App Styles (initially hidden) */
+        #mainApplication {
+            display: none;
+            padding-top: 76px;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #e55a2b;
+            border-color: #e55a2b;
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 53, 0.25);
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(26, 77, 140, 0.85), rgba(26, 77, 140, 0.95)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            position: relative;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .alumni-card {
+            position: relative;
+            height: 100%;
+        }
+        
+        .alumni-card .branch-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .alumni-card.civil .branch-badge { background-color: var(--civil); }
+        .alumni-card.cse .branch-badge { background-color: var(--cse); }
+        .alumni-card.electrical .branch-badge { background-color: var(--electrical); }
+        .alumni-card.mechanical .branch-badge { background-color: var(--mechanical); }
+        .alumni-card.business .branch-badge { background-color: var(--business); }
+        .alumni-card.medical .branch-badge { background-color: var(--medical); }
+        .alumni-card.arts .branch-badge { background-color: var(--arts); }
+        
+        .alumni-card .social-links a {
+            color: var(--primary);
+            margin-right: 15px;
+            font-size: 1.2rem;
+            transition: color 0.2s ease;
+        }
+        
+        .alumni-card .social-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .alumni-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+        
+        .filter-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+        
+        /* Profile Modal */
+        .profile-modal .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .profile-modal .modal-header {
+            background: linear-gradient(to right, var(--primary), #2c6cb0);
+            color: white;
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .profile-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+        
+        .skill-badge {
+            display: inline-block;
+            background: #f1f8ff;
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 0 5px 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .toast {
+            background: white;
+            border-left: 4px solid var(--success);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s forwards;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Loading animation */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: var(--primary);
+        }
+        
+        /* Connection status */
+        .connection-status {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background-color: var(--success);
+            color: white;
+        }
+        
+        /* Personalized recommendations */
+        .recommendation-card {
+            border-left: 4px solid var(--secondary);
+        }
+        
+        /* Event-specific styles */
+        .event-card {
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .event-date {
+            background: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .event-date .month {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        
+        .event-date .day {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        
+        .event-type-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: white;
+        }
+        
+        .event-type-in-person {
+            background-color: var(--primary);
+        }
+        
+        .event-type-virtual {
+            background-color: var(--cse);
+        }
+        
+        .event-type-hybrid {
+            background-color: var(--secondary);
+        }
+        
+        .event-status-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: white;
+        }
+        
+        .event-status-upcoming {
+            background-color: var(--success);
+        }
+        
+        .event-status-ongoing {
+            background-color: var(--warning);
+        }
+        
+        .event-status-completed {
+            background-color: var(--secondary);
+        }
+        
+        .event-status-cancelled {
+            background-color: var(--electrical);
+        }
+        
+        .event-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        .event-registration-progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 3rem 0;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .alumni-img {
+                width: 80px;
+                height: 80px;
+            }
+            
+            #mainApplication {
+                padding-top: 68px;
+            }
+            
+            .event-date {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .event-date .day {
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* Add Profile Modal Styles */
+        .add-profile-modal .modal-dialog {
+            max-width: 700px;
+        }
+        
+        .qualification-item {
+            border-left: 3px solid var(--primary);
+            padding-left: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .qualification-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+        
+        .qualification-actions {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Container (initially shown) -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h3><i class="fas fa-graduation-cap me-2"></i>Alumni Connect</h3>
+                <p class="mb-0">Sign in to your account</p>
+            </div>
+            <div class="auth-body">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="loginEmail" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="loginEmail" placeholder="name@example.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                </form>
+            </div>
+            <div class="auth-footer">
+                <p class="mb-0">Don't have an account? <a href="#" class="auth-switch" id="showRegister">Sign up</a></p>
+                <p class="mt-2"><a href="#" class="text-muted">Forgot your password?</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application (initially hidden) -->
+    <div id="mainApplication">
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <img src="https://via.placeholder.com/40x40/1a4d8c/ffffff?text=A" alt="Logo" class="me-2">
+                    Alumni Connect
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="#" data-page="home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-page="directory">Alumni Directory</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-page="events">Events</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-page="opportunities">Opportunities</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-page="dashboard">Dashboard</a></li>
+                    </ul>
+                    
+                    <div class="navbar-nav ms-auto">
+                        <div class="d-flex align-items-center">
+                            <div class="dropdown">
+                                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://via.placeholder.com/32x32/1a4d8c/ffffff?text=U" alt="User" width="32" height="32" class="rounded-circle me-2" id="navbarUserImg">
+                                    <span id="username">User</span>
+                                    <span class="position-relative ms-2" id="notificationBell">
+                                        <i class="fas fa-bell"></i>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationCount">0</span>
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdownUser">
+                                    <li><a class="dropdown-item" href="#" data-page="profile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="#" data-page="dashboard">Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="#" data-page="connections">Connections</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#" id="logoutBtn">Sign out</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Toast Container -->
+        <div class="toast-container"></div>
+
+        <!-- Page Content -->
+        <div id="pageContent">
+            <!-- Home Page -->
+            <div class="page" id="home-page">
+                <!-- Hero Section -->
+                <section class="hero-section text-center">
+                    <div class="container">
+                        <h1 class="display-4 fw-bold mb-3">Alumni Network</h1>
+                        <p class="lead mb-4">Connecting past, present and future graduates from institutions worldwide</p>
+                        <button class="btn btn-primary btn-lg mt-3" data-page="directory">Explore Alumni Directory</button>
+                    </div>
+                </section>
+
+                <!-- Stats Section -->
+                <section class="py-5">
+                    <div class="container">
+                        <div class="row text-center">
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="stats-number" id="alumniCount">2,347</div>
+                                <div class="text-muted">Registered Alumni</div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="stats-number">18</div>
+                                <div class="text-muted">Events This Year</div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="stats-number">67</div>
+                                <div class="text-muted">Job Opportunities</div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-4">
+                                <div class="stats-number">8</div>
+                                <div class="text-muted">Active Branches</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Featured Alumni Section -->
+                <section class="py-5 bg-light">
+                    <div class="container">
+                        <h2 class="section-title text-center">Featured Alumni</h2>
+                        <p class="text-center mb-5">Connect with these recently active alumni from our network</p>
+                        
+                        <div class="row" id="featuredAlumni">
+                            <!-- Featured alumni will be loaded here -->
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button class="btn btn-outline-primary" data-page="directory">View All Alumni</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Main Content -->
+                <div class="container my-5">
+                    <div class="row">
+                        <!-- Left Sidebar -->
+                        <div class="col-lg-3">
+                            <div class="filter-panel">
+                                <h5>Quick Links</h5>
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action" data-page="directory">
+                                        <i class="fas fa-user-friends me-2"></i> Alumni Directory
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" data-page="events">
+                                        <i class="fas fa-calendar-alt me-2"></i> Upcoming Events
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" data-page="opportunities">
+                                        <i class="fas fa-briefcase me-2"></i> Job Opportunities
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" data-page="profile">
+                                        <i class="fas fa-user-edit me-2"></i> Update Profile
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="filter-panel mt-4">
+                                <h5>Network Stats</h5>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>New This Week</span>
+                                    <span class="fw-bold">42</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>Mentors Available</span>
+                                    <span class="fw-bold">243</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2">
+                                    <span>Hiring Now</span>
+                                    <span class="fw-bold">56</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Content Area -->
+                        <div class="col-lg-9">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Upcoming Events</h5>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-primary text-white rounded p-2 me-3">
+                                                    <div class="fw-bold">15</div>
+                                                    <div>Sept</div>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">Annual Alumni Meet 2023</h6>
+                                                    <p class="text-muted mb-0">Virtual Event</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-primary text-white rounded p-2 me-3">
+                                                    <div class="fw-bold">28</div>
+                                                    <div>Oct</div>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">Industry-Academia Conclave</h6>
+                                                    <p class="text-muted mb-0">New York, USA</p>
+                                                </div>
+                                            </div>
+                                            <a href="#" class="btn btn-outline-primary btn-sm" data-page="events">View All Events</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Job Opportunities</h5>
+                                            <div class="mb-3">
+                                                <h6 class="mb-0">Software Development Engineer</h6>
+                                                <p class="text-muted mb-0">Amazon • Posted by: Neha Verma</p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <h6 class="mb-0">Civil Project Manager</h6>
+                                                <p class="text-muted mb-0">Shapoorji Pallonji • Posted by: Amit Shah</p>
+                                            </div>
+                                            <a href="#" class="btn btn-outline-primary btn-sm" data-page="opportunities">View All Opportunities</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Recent Network Activity</h5>
+                                    <div class="d-flex align-items-start mb-3">
+                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80" class="rounded-circle me-3" width="40" height="40" alt="User">
+                                        <div>
+                                            <h6 class="mb-0">Rahul Sharma updated his profile</h6>
+                                            <p class="text-muted mb-0">2 hours ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start mb-3">
+                                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80" class="rounded-circle me-3" width="40" height="40" alt="User">
+                                        <div>
+                                            <h6 class="mb-0">Priya Patel posted a new job opportunity</h6>
+                                            <p class="text-muted mb-0">5 hours ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start mb-3">
+                                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80" class="rounded-circle me-3" width="40" height="40" alt="User">
+                                        <div>
+                                            <h6 class="mb-0">Sanjay Mehta registered for the upcoming event</h6>
+                                            <p class="text-muted mb-0">Yesterday</p>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="btn btn-outline-primary btn-sm">Show More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alumni Directory Page -->
+            <div class="page d-none" id="directory-page">
+                <!-- Directory Header -->
+                <div class="directory-header">
+                    <div class="container">
+                        <h1 class="display-4 fw-bold">Alumni Directory</h1>
+                        <p class="lead">Connect with fellow alumni from around the world</p>
+                        <div class="row mt-4">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-lg" placeholder="Search by name, company, skills..." id="searchInput">
+                                    <button class="btn btn-primary" type="button" id="searchButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                <button class="btn btn-outline-light me-2" id="advancedSearchToggle">
+                                    <i class="fas fa-sliders-h"></i> Advanced Search
+                                </button>
+                                <button class="btn btn-light" id="addProfileBtn">
+                                    <i class="fas fa-plus"></i> Add Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Search Tools (Initially hidden) -->
+                <div class="container mb-4 d-none" id="advancedSearchTools">
+                    <div class="search-box">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Advanced Filters</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Branch/Department</label>
+                                        <select class="form-select" id="branchFilter">
+                                            <option value="">All Branches</option>
+                                            <option value="civil">Civil Engineering</option>
+                                            <option value="cse">Computer Science & Engineering</option>
+                                            <option value="electrical">Electrical Engineering</option>
+                                            <option value="mechanical">Mechanical Engineering</option>
+                                            <option value="business">Business Administration</option>
+                                            <option value="medical">Medical Sciences</option>
+                                            <option value="arts">Arts & Humanities</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Graduation Year</label>
+                                        <select class="form-select" id="yearFilter">
+                                            <option value="">All Years</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2018">2018</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" class="form-control" id="locationFilter" placeholder="City, Country">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Company</label>
+                                        <input type="text" class="form-control" id="companyFilter" placeholder="Company name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Skills & Industries</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Skills</label>
+                                    <select class="form-select" multiple id="skillsFilter">
+                                        <option value="javascript">JavaScript</option>
+                                        <option value="python">Python</option>
+                                        <option value="react">React</option>
+                                        <option value="node">Node.js</option>
+                                        <option value="aws">AWS</option>
+                                        <option value="ui-ux">UI/UX Design</option>
+                                        <option value="project-management">Project Management</option>
+                                    </select>
+                                    <div class="form-text">Hold Ctrl/Cmd to select multiple</div>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="availableForMentoring">
+                                    <label class="form-check-label" for="availableForMentoring">
+                                        Available for Mentoring
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="hiring">
+                                    <label class="form-check-label" for="hiring">
+                                        Currently Hiring
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <span class="me-2">Active filters:</span>
+                                <div class="d-inline-block" id="activeFilters"></div>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-secondary btn-sm me-2" id="clearFilters">
+                                    <i class="fas fa-times"></i> Clear All
+                                </button>
+                                <button class="btn btn-primary btn-sm" id="applyFilters">
+                                    <i class="fas fa-check"></i> Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="container my-5">
+                    <div class="row">
+                        <!-- Left Sidebar -->
+                        <div class="col-lg-3">
+                            <div class="filter-panel">
+                                <h5>Quick Filters</h5>
+                                
+                                <div class="mb-4">
+                                    <h6>By Branch</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="civil" id="civilCheck">
+                                        <label class="form-check-label" for="civilCheck">Civil Engineering</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="cse" id="cseCheck" checked>
+                                        <label class="form-check-label" for="cseCheck">Computer Science</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="electrical" id="electricalCheck" checked>
+                                        <label class="form-check-label" for="electricalCheck">Electrical Engineering</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="mechanical" id="mechanicalCheck">
+                                        <label class="form-check-label" for="mechanicalCheck">Mechanical Engineering</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="business" id="businessCheck">
+                                        <label class="form-check-label" for="businessCheck">Business Administration</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="medical" id="medicalCheck">
+                                        <label class="form-check-label" for="medicalCheck">Medical Sciences</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input branch-filter" type="checkbox" value="arts" id="artsCheck">
+                                        <label class="form-check-label" for="artsCheck">Arts & Humanities</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h6>By Graduation Year</h6>
+                                    <select class="form-select" id="yearQuickFilter">
+                                        <option value="">All Years</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2019">2019</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h6>By Location</h6>
+                                    <select class="form-select" id="locationQuickFilter">
+                                        <option value="">All Locations</option>
+                                        <option value="usa">United States</option>
+                                        <option value="india">India</option>
+                                        <option value="uk">United Kingdom</option>
+                                        <option value="canada">Canada</option>
+                                        <option value="australia">Australia</option>
+                                        <option value="germany">Germany</option>
+                                    </select>
+                                </div>
+                                
+                                <button class="btn btn-primary w-100 mt-3" id="applyQuickFilters">
+                                    Apply Filters
+                                </button>
+                            </div>
+                            
+                            <div class="filter-panel mt-4">
+                                <h5>Directory Stats</h5>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>Total Alumni</span>
+                                    <span class="fw-bold">2,347</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>Active This Month</span>
+                                    <span class="fw-bold">523</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>New This Month</span>
+                                    <span class="fw-bold">68</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2">
+                                    <span>Mentors Available</span>
+                                    <span class="fw-bold">243</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Content Area -->
+                        <div class="col-lg-9">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h2 class="section-title mb-0">Alumni Profiles</h2>
+                                <div class="d-flex">
+                                    <div class="dropdown me-2">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown">
+                                            <i class="fas fa-sort"></i> Sort By
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                                            <li><a class="dropdown-item sort-option" href="#" data-sort="name">Name (A-Z)</a></li>
+                                            <li><a class="dropdown-item sort-option" href="#" data-sort="recent">Most Recent</a></li>
+                                            <li><a class="dropdown-item sort-option" href="#" data-sort="location">Location</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-secondary view-toggle active" data-view="grid">
+                                            <i class="fas fa-th"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary view-toggle" data-view="list">
+                                            <i class="fas fa-list"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="loading-spinner" id="directoryLoading">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2">Loading alumni profiles...</p>
+                            </div>
+                            
+                            <div class="row" id="alumniGrid">
+                                <!-- Alumni cards will be loaded here -->
+                            </div>
+                            
+                            <div class="d-none" id="alumniList">
+                                <!-- Alumni list view will be loaded here -->
+                            </div>
+                            
+                            <nav aria-label="Page navigation" class="mt-4">
+                                <ul class="pagination justify-content-center" id="pagination">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Events Page -->
+            <div class="page d-none" id="events-page">
+                <!-- Events Header -->
+                <div class="events-header">
+                    <div class="container">
+                        <h1 class="display-4 fw-bold">Alumni Events</h1>
+                        <p class="lead">Connect, network, and grow with fellow alumni through our events</p>
+                        <div class="row mt-4">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-lg" placeholder="Search events by name, location, type..." id="eventSearchInput">
+                                    <button class="btn btn-primary" type="button" id="eventSearchButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                <button class="btn btn-outline-light me-2" id="eventFilterToggle">
+                                    <i class="fas fa-filter"></i> Filter Events
+                                </button>
+                                <button class="btn btn-light" id="createEventBtn">
+                                    <i class="fas fa-plus"></i> Create Event
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Filter Tools (Initially hidden) -->
+                <div class="container mb-4 d-none" id="eventFilterTools">
+                    <div class="search-box">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Filter Events</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Event Type</label>
+                                        <select class="form-select" id="eventTypeFilter">
+                                            <option value="">All Types</option>
+                                            <option value="conference">Conference</option>
+                                            <option value="networking">Networking</option>
+                                            <option value="workshop">Workshop</option>
+                                            <option value="seminar">Seminar</option>
+                                            <option value="reunion">Reunion</option>
+                                            <option value="webinar">Webinar</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Date Range</label>
+                                        <select class="form-select" id="dateRangeFilter">
+                                            <option value="">All Dates</option>
+                                            <option value="upcoming">Upcoming Events</option>
+                                            <option value="this-week">This Week</option>
+                                            <option value="this-month">This Month</option>
+                                            <option value="past">Past Events</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Location</label>
+                                        <select class="form-select" id="eventLocationFilter">
+                                            <option value="">All Locations</option>
+                                            <option value="online">Online/Virtual</option>
+                                            <option value="new-york">New York, USA</option>
+                                            <option value="london">London, UK</option>
+                                            <option value="mumbai">Mumbai, India</option>
+                                            <option value="sydney">Sydney, Australia</option>
+                                            <option value="toronto">Toronto, Canada</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Branch/Department</label>
+                                        <select class="form-select" id="eventBranchFilter">
+                                            <option value="">All Branches</option>
+                                            <option value="civil">Civil Engineering</option>
+                                            <option value="cse">Computer Science & Engineering</option>
+                                            <option value="electrical">Electrical Engineering</option>
+                                            <option value="mechanical">Mechanical Engineering</option>
+                                            <option value="business">Business Administration</option>
+                                            <option value="medical">Medical Sciences</option>
+                                            <option value="arts">Arts & Humanities</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Additional Filters</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Event Status</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="upcoming" id="statusUpcoming" checked>
+                                        <label class="form-check-label" for="statusUpcoming">
+                                            Upcoming
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="ongoing" id="statusOngoing" checked>
+                                        <label class="form-check-label" for="statusOngoing">
+                                            Ongoing
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="completed" id="statusCompleted">
+                                        <label class="form-check-label" for="statusCompleted">
+                                            Completed
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="cancelled" id="statusCancelled">
+                                        <label class="form-check-label" for="statusCancelled">
+                                            Cancelled
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="freeEvents">
+                                    <label class="form-check-label" for="freeEvents">
+                                        Free Events Only
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="registrationOpen">
+                                    <label class="form-check-label" for="registrationOpen">
+                                        Registration Open Only
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <span class="me-2">Active filters:</span>
+                                <div class="d-inline-block" id="activeEventFilters"></div>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-secondary btn-sm me-2" id="clearEventFilters">
+                                    <i class="fas fa-times"></i> Clear All
+                                </button>
+                                <button class="btn btn-primary btn-sm" id="applyEventFilters">
+                                    <i class="fas fa-check"></i> Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="container my-5">
+                    <div class="row">
+                        <!-- Left Sidebar -->
+                        <div class="col-lg-3">
+                            <div class="filter-panel">
+                                <h5>Quick Filters</h5>
+                                
+                                <div class="mb-4">
+                                    <h6>By Event Type</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-type-filter" type="checkbox" value="conference" id="conferenceCheck" checked>
+                                        <label class="form-check-label" for="conferenceCheck">Conference</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-type-filter" type="checkbox" value="networking" id="networkingCheck" checked>
+                                        <label class="form-check-label" for="networkingCheck">Networking</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-type-filter" type="checkbox" value="workshop" id="workshopCheck" checked>
+                                        <label class="form-check-label" for="workshopCheck">Workshop</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-type-filter" type="checkbox" value="seminar" id="seminarCheck" checked>
+                                        <label class="form-check-label" for="seminarCheck">Seminar</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-type-filter" type="checkbox" value="reunion" id="reunionCheck" checked>
+                                        <label class="form-check-label" for="reunionCheck">Reunion</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-type-filter" type="checkbox" value="webinar" id="webinarCheck" checked>
+                                        <label class="form-check-label" for="webinarCheck">Webinar</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h6>By Date</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-date-filter" type="radio" name="eventDateFilter" value="all" id="dateAll" checked>
+                                        <label class="form-check-label" for="dateAll">All Dates</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-date-filter" type="radio" name="eventDateFilter" value="upcoming" id="dateUpcoming">
+                                        <label class="form-check-label" for="dateUpcoming">Upcoming</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-date-filter" type="radio" name="eventDateFilter" value="this-week" id="dateThisWeek">
+                                        <label class="form-check-label" for="dateThisWeek">This Week</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-date-filter" type="radio" name="eventDateFilter" value="this-month" id="dateThisMonth">
+                                        <label class="form-check-label" for="dateThisMonth">This Month</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-date-filter" type="radio" name="eventDateFilter" value="past" id="datePast">
+                                        <label class="form-check-label" for="datePast">Past Events</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h6>By Location</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-location-filter" type="checkbox" value="online" id="locationOnline" checked>
+                                        <label class="form-check-label" for="locationOnline">Online/Virtual</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-location-filter" type="checkbox" value="new-york" id="locationNY" checked>
+                                        <label class="form-check-label" for="locationNY">New York</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-location-filter" type="checkbox" value="london" id="locationLondon" checked>
+                                        <label class="form-check-label" for="locationLondon">London</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-location-filter" type="checkbox" value="mumbai" id="locationMumbai" checked>
+                                        <label class="form-check-label" for="locationMumbai">Mumbai</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-location-filter" type="checkbox" value="sydney" id="locationSydney" checked>
+                                        <label class="form-check-label" for="locationSydney">Sydney</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input event-location-filter" type="checkbox" value="toronto" id="locationToronto" checked>
+                                        <label class="form-check-label" for="locationToronto">Toronto</label>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-primary w-100 mt-3" id="applyEventQuickFilters">
+                                    Apply Filters
+                                </button>
+                            </div>
+                            
+                            <div class="filter-panel mt-4">
+                                <h5>Events Stats</h5>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>Total Events</span>
+                                    <span class="fw-bold">18</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>Upcoming Events</span>
+                                    <span class="fw-bold">6</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2 border-bottom">
+                                    <span>This Month</span>
+                                    <span class="fw-bold">3</span>
+                                </div>
+                                <div class="d-flex justify-content-between py-2">
+                                    <span>Avg. Attendance</span>
+                                    <span class="fw-bold">78%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Content Area -->
+                        <div class="col-lg-9">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h2 class="section-title mb-0">All Events</h2>
+                                <div class="d-flex">
+                                    <div class="dropdown me-2">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="eventSortDropdown" data-bs-toggle="dropdown">
+                                            <i class="fas fa-sort"></i> Sort By
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="eventSortDropdown">
+                                            <li><a class="dropdown-item event-sort-option" href="#" data-sort="date">Date (Soonest)</a></li>
+                                            <li><a class="dropdown-item event-sort-option" href="#" data-sort="popularity">Popularity</a></li>
+                                            <li><a class="dropdown-item event-sort-option" href="#" data-sort="name">Name (A-Z)</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-secondary event-view-toggle active" data-view="grid">
+                                            <i class="fas fa-th"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary event-view-toggle" data-view="list">
+                                            <i class="fas fa-list"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary event-view-toggle" data-view="calendar">
+                                            <i class="fas fa-calendar"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="loading-spinner" id="eventsLoading">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2">Loading events...</p>
+                            </div>
+                            
+                            <div class="row" id="eventsGrid">
+                                <!-- Event cards will be loaded here -->
+                            </div>
+                            
+                            <div class="d-none" id="eventsList">
+                                <!-- Event list view will be loaded here -->
+                            </div>
+                            
+                            <div class="d-none" id="eventsCalendar">
+                                <!-- Calendar view will be loaded here -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Calendar View</h5>
+                                        <p class="text-muted">Select a date to view events</p>
+                                        <div id="calendar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <nav aria-label="Page navigation" class="mt-4">
+                                <ul class="pagination justify-content-center" id="eventsPagination">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other pages would go here -->
+            <div class="page d-none" id="opportunities-page">
+                <div class="container my-5">
+                    <h1>Opportunities Page</h1>
+                    <p>This page would display job opportunities and other professional prospects.</p>
+                </div>
+            </div>
+
+            <div class="page d-none" id="dashboard-page">
+                <div class="container my-5">
+                    <h1>Dashboard Page</h1>
+                    <p>This page would display user-specific information and analytics.</p>
+                </div>
+            </div>
+
+            <div class="page d-none" id="profile-page">
+                <div class="container my-5">
+                    <h1>Profile Page</h1>
+                    <p>This page would display and allow editing of user profile information.</p>
+                </div>
+            </div>
+
+            <div class="page d-none" id="connections-page">
+                <div class="container my-5">
+                    <h1>Connections Page</h1>
+                    <p>This page would display the user's connections and networking activity.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Profile Modal -->
+    <div class="modal fade add-profile-modal" id="addProfileModal" tabindex="-1" aria-labelledby="addProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProfileModalLabel">Add New Alumni Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProfileForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="profileName" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="profileName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="profileBranch" class="form-label">Branch/Department *</label>
+                                    <select class="form-select" id="profileBranch" required>
+                                        <option value="">Select Branch</option>
+                                        <option value="civil">Civil Engineering</option>
+                                        <option value="cse">Computer Science & Engineering</option>
+                                        <option value="electrical">Electrical Engineering</option>
+                                        <option value="mechanical">Mechanical Engineering</option>
+                                        <option value="business">Business Administration</option>
+                                        <option value="medical">Medical Sciences</option>
+                                        <option value="arts">Arts & Humanities</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="profileGraduationYear" class="form-label">Graduation Year *</label>
+                                    <input type="number" class="form-control" id="profileGraduationYear" min="1950" max="2030" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="profileProfession" class="form-label">Profession *</label>
+                                    <input type="text" class="form-control" id="profileProfession" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="profileCompany" class="form-label">Company/Organization</label>
+                                    <input type="text" class="form-control" id="profileCompany">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="profileLocation" class="form-label">Location</label>
+                                    <input type="text" class="form-control" id="profileLocation" placeholder="City, Country">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="profileBio" class="form-label">Bio/Description</label>
+                            <textarea class="form-control" id="profileBio" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="profileImage" class="form-label">Profile Image URL</label>
+                            <input type="url" class="form-control" id="profileImage" placeholder="https://example.com/image.jpg">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Skills</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="profileSkillInput" placeholder="Add a skill">
+                                <button class="btn btn-outline-secondary" type="button" id="addSkillBtn">Add</button>
+                            </div>
+                            <div class="mt-2" id="profileSkillsContainer"></div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Qualifications</label>
+                            <div id="qualificationsContainer">
+                                <!-- Qualifications will be added here dynamically -->
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="addQualificationBtn">
+                                <i class="fas fa-plus"></i> Add Qualification
+                            </button>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Contact Information</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input type="email" class="form-control" id="profileEmail" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <input type="tel" class="form-control" id="profilePhone" placeholder="Phone">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text"><i class="fab fa-linkedin"></i></span>
+                                <input type="url" class="form-control" id="profileLinkedIn" placeholder="LinkedIn Profile URL">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveProfileBtn">Save Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Sample data for events
+        const eventsData = [
+            {
+                id: 1,
+                title: "Annual Alumni Meet 2023",
+                date: "2023-09-15",
+                time: "18:00",
+                location: "Virtual Event",
+                type: "virtual",
+                status: "upcoming",
+                description: "Join us for our annual alumni meet where we celebrate our community and network with fellow graduates.",
+                image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                capacity: 200,
+                registered: 156,
+                branch: "all",
+                price: 0
+            },
+            {
+                id: 2,
+                title: "Tech Industry Networking Night",
+                date: "2023-09-22",
+                time: "19:00",
+                location: "San Francisco, CA",
+                type: "in-person",
+                status: "upcoming",
+                description: "An exclusive networking event for tech industry professionals and alumni working in technology.",
+                image: "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                capacity: 100,
+                registered: 87,
+                branch: "cse",
+                price: 25
+            },
+            {
+                id: 3,
+                title: "Leadership Workshop Series",
+                date: "2023-10-05",
+                time: "14:00",
+                location: "Virtual Event",
+                type: "virtual",
+                status: "upcoming",
+                description: "A three-part workshop series focused on developing leadership skills for career advancement.",
+                image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                capacity: 150,
+                registered: 132,
+                branch: "business",
+                price: 0
+            },
+            {
+                id: 4,
+                title: "Engineering Alumni Reunion",
+                date: "2023-10-12",
+                time: "17:30",
+                location: "Chicago, IL",
+                type: "in-person",
+                status: "upcoming",
+                description: "A special reunion event for engineering alumni from all disciplines to reconnect and network.",
+                image: "https://images.unsplash.com/photo-1568992687947-868a62a9f521?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                capacity: 120,
+                registered: 98,
+                branch: "engineering",
+                price: 35
+            },
+            {
+                id: 5,
+                title: "Healthcare Innovation Summit",
+                date: "2023-10-20",
+                time: "09:00",
+                location: "Boston, MA",
+                type: "hybrid",
+                status: "upcoming",
+                description: "Join healthcare professionals and alumni to discuss the latest innovations in medical technology and practices.",
+                image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                capacity: 200,
+                registered: 145,
+                branch: "medical",
+                price: 50
+            },
+            {
+                id: 6,
+                title: "Arts & Culture Gala",
+                date: "2023-11-05",
+                time: "19:30",
+                location: "New York, NY",
+                type: "in-person",
+                status: "upcoming",
+                description: "An elegant evening celebrating our arts and culture alumni with performances, exhibitions, and networking.",
+                image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                capacity: 150,
+                registered: 112,
+                branch: "arts",
+                price: 75
+            },
+            {
+                id: 7,
+                title: "Summer Networking Mixer",
+                date: "2023-08-10",
+                time: "18:30",
+                location: "Los Angeles, CA",
+                type: "in-person",
+                status: "completed",
+                description: "A casual summer networking event for alumni in the Southern California area.",
+                image: "https://images.unsplash.com/photo-1527525443983-6e60c75fff46?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                capacity: 80,
+                registered: 75,
+                branch: "all",
+                price: 20
+            },
+            {
+                id: 8,
+                title: "Women in Leadership Conference",
+                date: "2023-07-22",
+                time: "09:00",
+                location: "Virtual Event",
+                type: "virtual",
+                status: "completed",
+                description: "A day-long conference featuring successful women leaders from various industries.",
+                image: "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                capacity: 300,
+                registered: 278,
+                branch: "all",
+                price: 0
+            }
+        ];
+
+        // Sample alumni data
+        let alumniProfiles = JSON.parse(localStorage.getItem('alumniProfiles')) || [
+            {
+                id: 1,
+                name: "Rajesh Kumar",
+                branch: "cse",
+                graduationYear: 2018,
+                profession: "Senior Software Engineer",
+                company: "Google",
+                location: "San Francisco, USA",
+                bio: "Experienced software engineer with expertise in cloud computing and distributed systems.",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                skills: ["JavaScript", "Python", "AWS", "Node.js", "React"],
+                qualifications: [
+                    {
+                        degree: "B.Tech in Computer Science",
+                        institution: "IIT Delhi",
+                        year: 2018,
+                        description: "Specialized in Artificial Intelligence and Machine Learning"
+                    }
+                ],
+                email: "rajesh.kumar@example.com",
+                phone: "+1-555-0123",
+                linkedin: "https://linkedin.com/in/rajeshkumar"
+            },
+            {
+                id: 2,
+                name: "Priya Sharma",
+                branch: "business",
+                graduationYear: 2015,
+                profession: "Product Manager",
+                company: "Microsoft",
+                location: "London, UK",
+                bio: "Strategic product manager with a track record of delivering successful software products.",
+                image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                skills: ["Product Management", "Market Analysis", "Agile Methodology", "UX Design"],
+                qualifications: [
+                    {
+                        degree: "MBA",
+                        institution: "London Business School",
+                        year: 2017,
+                        description: "Focus on Technology Management and Entrepreneurship"
+                    },
+                    {
+                        degree: "B.Com in Accounting",
+                        institution: "University of Delhi",
+                        year: 2015,
+                        description: "Graduated with honors"
+                    }
+                ],
+                email: "priya.sharma@example.com",
+                phone: "+44-20-7946-0958",
+                linkedin: "https://linkedin.com/in/priyasharma"
+            },
+            {
+                id: 3,
+                name: "Amit Patel",
+                branch: "electrical",
+                graduationYear: 2012,
+                profession: "Electrical Engineer",
+                company: "Tesla",
+                location: "Palo Alto, USA",
+                bio: "Electrical engineer specializing in power systems and renewable energy solutions.",
+                image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                skills: ["Power Systems", "Renewable Energy", "MATLAB", "Circuit Design"],
+                qualifications: [
+                    {
+                        degree: "M.S. in Electrical Engineering",
+                        institution: "Stanford University",
+                        year: 2014,
+                        description: "Thesis on Smart Grid Technologies"
+                    },
+                    {
+                        degree: "B.Tech in Electrical Engineering",
+                        institution: "IIT Bombay",
+                        year: 2012,
+                        description: "Specialized in Power Electronics"
+                    }
+                ],
+                email: "amit.patel@example.com",
+                phone: "+1-555-0167",
+                linkedin: "https://linkedin.com/in/amitpatel"
+            },
+            {
+                id: 4,
+                name: "Sneha Gupta",
+                branch: "medical",
+                graduationYear: 2016,
+                profession: "Senior Physician",
+                company: "Mayo Clinic",
+                location: "Boston, USA",
+                bio: "Board-certified physician with expertise in internal medicine and patient care.",
+                image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                skills: ["Internal Medicine", "Patient Care", "Medical Research", "Diagnostics"],
+                qualifications: [
+                    {
+                        degree: "M.D. in Medicine",
+                        institution: "Harvard Medical School",
+                        year: 2020,
+                        description: "Residency in Internal Medicine"
+                    },
+                    {
+                        degree: "MBBS",
+                        institution: "AIIMS Delhi",
+                        year: 2016,
+                        description: "Graduated at the top of the class"
+                    }
+                ],
+                email: "sneha.gupta@example.com",
+                phone: "+1-555-0198",
+                linkedin: "https://linkedin.com/in/snehagupta"
+            }
+        ];
+
+        // DOM ready function
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the application
+            initApp();
+            
+            // Load events when the events page is shown
+            document.querySelector('[data-page="events"]').addEventListener('click', function() {
+                setTimeout(loadEvents, 100);
+            });
+            
+            // Load alumni directory when the directory page is shown
+            document.querySelector('[data-page="directory"]').addEventListener('click', function() {
+                setTimeout(loadAlumniDirectory, 100);
+            });
+        });
+
+        // Initialize the application
+        function initApp() {
+            // Set up event listeners for navigation
+            setupNavigation();
+            
+            // Set up authentication forms
+            setupAuthForms();
+            
+            // Set up alumni directory functionality
+            setupAlumniDirectory();
+            
+            // Load featured alumni on home page
+            loadFeaturedAlumni();
+        }
+
+        // Set up navigation between pages
+        function setupNavigation() {
+            // Navigation links
+            const navLinks = document.querySelectorAll('[data-page]');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    showPage(pageId);
+                });
+            });
+
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+        }
+
+        // Show the specified page and hide others
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('d-none');
+            });
+
+            // Show the selected page
+            const pageElement = document.getElementById(`${pageId}-page`);
+            if (pageElement) {
+                pageElement.classList.remove('d-none');
+                
+                // Update active navigation link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+                
+                // Load content for specific pages
+                if (pageId === 'directory') {
+                    loadAlumniDirectory();
+                } else if (pageId === 'events') {
+                    loadEvents();
+                }
+            }
+        }
+
+        // Set up authentication forms
+        function setupAuthForms() {
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                login();
+            });
+
+            // Show register form link
+            document.getElementById('showRegister').addEventListener('click', function(e) {
+                e.preventDefault();
+                // In a real app, this would show a registration form
+                showToast('Registration feature would be implemented here', 'info');
+            });
+        }
+
+        // Set up alumni directory functionality
+        function setupAlumniDirectory() {
+            // Add profile button
+            document.getElementById('addProfileBtn').addEventListener('click', function() {
+                // Reset form
+                document.getElementById('addProfileForm').reset();
+                document.getElementById('profileSkillsContainer').innerHTML = '';
+                document.getElementById('qualificationsContainer').innerHTML = '';
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('addProfileModal'));
+                modal.show();
+            });
+            
+            // Add skill button
+            document.getElementById('addSkillBtn').addEventListener('click', function() {
+                const skillInput = document.getElementById('profileSkillInput');
+                const skill = skillInput.value.trim();
+                
+                if (skill) {
+                    addSkillToProfile(skill);
+                    skillInput.value = '';
+                }
+            });
+            
+            // Add qualification button
+            document.getElementById('addQualificationBtn').addEventListener('click', function() {
+                addQualificationField();
+            });
+            
+            // Save profile button
+            document.getElementById('saveProfileBtn').addEventListener('click', function() {
+                saveAlumniProfile();
+            });
+            
+            // Search functionality
+            document.getElementById('searchButton').addEventListener('click', function() {
+                filterAlumni();
+            });
+            
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    filterAlumni();
+                }
+            });
+            
+            // Advanced search toggle
+            document.getElementById('advancedSearchToggle').addEventListener('click', function() {
+                const advancedSearchTools = document.getElementById('advancedSearchTools');
+                advancedSearchTools.classList.toggle('d-none');
+            });
+            
+            // Apply filters button
+            document.getElementById('applyFilters').addEventListener('click', function() {
+                filterAlumni();
+            });
+            
+            // Clear filters button
+            document.getElementById('clearFilters').addEventListener('click', function() {
+                document.getElementById('branchFilter').value = '';
+                document.getElementById('yearFilter').value = '';
+                document.getElementById('locationFilter').value = '';
+                document.getElementById('companyFilter').value = '';
+                document.getElementById('skillsFilter').selectedIndex = -1;
+                document.getElementById('availableForMentoring').checked = false;
+                document.getElementById('hiring').checked = false;
+                
+                filterAlumni();
+            });
+        }
+
+        // Add skill to profile
+        function addSkillToProfile(skill) {
+            const skillsContainer = document.getElementById('profileSkillsContainer');
+            const skillId = 'skill-' + Date.now();
+            
+            const skillElement = document.createElement('div');
+            skillElement.className = 'skill-badge me-2 mb-2';
+            skillElement.id = skillId;
+            skillElement.innerHTML = `
+                ${skill}
+                <button type="button" class="btn-close btn-close-white ms-1" onclick="removeSkill('${skillId}')"></button>
+            `;
+            
+            skillsContainer.appendChild(skillElement);
+        }
+
+        // Remove skill from profile
+        function removeSkill(skillId) {
+            const skillElement = document.getElementById(skillId);
+            if (skillElement) {
+                skillElement.remove();
+            }
+        }
+
+        // Add qualification field
+        function addQualificationField(qualification = null) {
+            const qualificationsContainer = document.getElementById('qualificationsContainer');
+            const qualificationId = 'qualification-' + Date.now();
+            
+            const qualificationElement = document.createElement('div');
+            qualificationElement.className = 'qualification-item mb-3 p-3 bg-light rounded';
+            qualificationElement.id = qualificationId;
+            
+            qualificationElement.innerHTML = `
+                <div class="qualification-header mb-2">
+                    <h6 class="mb-0">${qualification ? 'Edit Qualification' : 'New Qualification'}</h6>
+                    <button type="button" class="btn-close" onclick="removeQualification('${qualificationId}')"></button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label class="form-label">Degree/Certificate</label>
+                            <input type="text" class="form-control qualification-degree" value="${qualification ? qualification.degree : ''}" placeholder="e.g. B.Tech in Computer Science">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label class="form-label">Institution</label>
+                            <input type="text" class="form-control qualification-institution" value="${qualification ? qualification.institution : ''}" placeholder="e.g. IIT Delhi">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label class="form-label">Year</label>
+                            <input type="number" class="form-control qualification-year" value="${qualification ? qualification.year : ''}" min="1950" max="2030">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control qualification-description" rows="2" placeholder="Additional details about this qualification">${qualification ? qualification.description : ''}</textarea>
+                </div>
+            `;
+            
+            qualificationsContainer.appendChild(qualificationElement);
+        }
+
+        // Remove qualification field
+        function removeQualification(qualificationId) {
+            const qualificationElement = document.getElementById(qualificationId);
+            if (qualificationElement) {
+                qualificationElement.remove();
+            }
+        }
+
+        // Save alumni profile
+        function saveAlumniProfile() {
+            // Get form values
+            const name = document.getElementById('profileName').value.trim();
+            const branch = document.getElementById('profileBranch').value;
+            const graduationYear = document.getElementById('profileGraduationYear').value;
+            const profession = document.getElementById('profileProfession').value.trim();
+            const company = document.getElementById('profileCompany').value.trim();
+            const location = document.getElementById('profileLocation').value.trim();
+            const bio = document.getElementById('profileBio').value.trim();
+            const image = document.getElementById('profileImage').value.trim();
+            const email = document.getElementById('profileEmail').value.trim();
+            const phone = document.getElementById('profilePhone').value.trim();
+            const linkedin = document.getElementById('profileLinkedIn').value.trim();
+            
+            // Validate required fields
+            if (!name || !branch || !graduationYear || !profession) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            // Get skills
+            const skillElements = document.getElementById('profileSkillsContainer').querySelectorAll('.skill-badge');
+            const skills = Array.from(skillElements).map(skillElement => {
+                return skillElement.textContent.replace('×', '').trim();
+            });
+            
+            // Get qualifications
+            const qualificationElements = document.getElementById('qualificationsContainer').querySelectorAll('.qualification-item');
+            const qualifications = Array.from(qualificationElements).map(qualificationElement => {
+                return {
+                    degree: qualificationElement.querySelector('.qualification-degree').value.trim(),
+                    institution: qualificationElement.querySelector('.qualification-institution').value.trim(),
+                    year: qualificationElement.querySelector('.qualification-year').value,
+                    description: qualificationElement.querySelector('.qualification-description').value.trim()
+                };
+            }).filter(q => q.degree && q.institution); // Only include qualifications with required fields
+            
+            // Create new profile
+            const newProfile = {
+                id: alumniProfiles.length > 0 ? Math.max(...alumniProfiles.map(p => p.id)) + 1 : 1,
+                name,
+                branch,
+                graduationYear: parseInt(graduationYear),
+                profession,
+                company,
+                location,
+                bio,
+                image: image || 'https://via.placeholder.com/200x200?text=No+Image',
+                skills,
+                qualifications,
+                email,
+                phone,
+                linkedin
+            };
+            
+            // Add to alumni profiles
+            alumniProfiles.push(newProfile);
+            
+            // Save to localStorage
+            localStorage.setItem('alumniProfiles', JSON.stringify(alumniProfiles));
+            
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addProfileModal'));
+            modal.hide();
+            
+            // Show success message
+            showToast('Profile added successfully!', 'success');
+            
+            // Reload alumni directory if it's currently visible
+            if (!document.getElementById('directory-page').classList.contains('d-none')) {
+                loadAlumniDirectory();
+            }
+        }
+
+        // Load alumni directory
+        function loadAlumniDirectory() {
+            const alumniGrid = document.getElementById('alumniGrid');
+            const alumniList = document.getElementById('alumniList');
+            
+            // Clear existing content
+            alumniGrid.innerHTML = '';
+            alumniList.innerHTML = '';
+            
+            // Show loading spinner
+            document.getElementById('directoryLoading').classList.remove('d-none');
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                // Hide loading spinner
+                document.getElementById('directoryLoading').classList.add('d-none');
+                
+                // Add alumni to grid view
+                alumniProfiles.forEach(alumni => {
+                    const alumniCard = createAlumniCard(alumni);
+                    alumniGrid.appendChild(alumniCard);
+                });
+                
+                // Add alumni to list view
+                alumniProfiles.forEach(alumni => {
+                    const alumniItem = createAlumniListItem(alumni);
+                    alumniList.appendChild(alumniItem);
+                });
+            }, 500);
+        }
+
+        // Filter alumni based on search criteria
+        function filterAlumni() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const branchFilter = document.getElementById('branchFilter').value;
+            const yearFilter = document.getElementById('yearFilter').value;
+            const locationFilter = document.getElementById('locationFilter').value.toLowerCase();
+            const companyFilter = document.getElementById('companyFilter').value.toLowerCase();
+            
+            const filteredAlumni = alumniProfiles.filter(alumni => {
+                // Search term filter
+                const matchesSearch = searchTerm === '' || 
+                    alumni.name.toLowerCase().includes(searchTerm) ||
+                    alumni.profession.toLowerCase().includes(searchTerm) ||
+                    alumni.company.toLowerCase().includes(searchTerm) ||
+                    alumni.skills.some(skill => skill.toLowerCase().includes(searchTerm));
+                
+                // Branch filter
+                const matchesBranch = branchFilter === '' || alumni.branch === branchFilter;
+                
+                // Year filter
+                const matchesYear = yearFilter === '' || alumni.graduationYear.toString() === yearFilter;
+                
+                // Location filter
+                const matchesLocation = locationFilter === '' || 
+                    (alumni.location && alumni.location.toLowerCase().includes(locationFilter));
+                
+                // Company filter
+                const matchesCompany = companyFilter === '' || 
+                    (alumni.company && alumni.company.toLowerCase().includes(companyFilter));
+                
+                return matchesSearch && matchesBranch && matchesYear && matchesLocation && matchesCompany;
+            });
+            
+            // Update alumni grid
+            const alumniGrid = document.getElementById('alumniGrid');
+            alumniGrid.innerHTML = '';
+            
+            filteredAlumni.forEach(alumni => {
+                const alumniCard = createAlumniCard(alumni);
+                alumniGrid.appendChild(alumniCard);
+            });
+            
+            // Update alumni list
+            const alumniList = document.getElementById('alumniList');
+            alumniList.innerHTML = '';
+            
+            filteredAlumni.forEach(alumni => {
+                const alumniItem = createAlumniListItem(alumni);
+                alumniList.appendChild(alumniItem);
+            });
+            
+            // Show message if no results
+            if (filteredAlumni.length === 0) {
+                alumniGrid.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h4>No alumni found</h4>
+                        <p class="text-muted">Try adjusting your search criteria</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Create alumni card for grid view
+        function createAlumniCard(alumni) {
+            const col = document.createElement('div');
+            col.className = 'col-md-6 col-lg-4 mb-4';
+            
+            const branchName = getBranchName(alumni.branch);
+            
+            col.innerHTML = `
+                <div class="card alumni-card ${alumni.branch}">
+                    <span class="branch-badge">${branchName}</span>
+                    <div class="card-body text-center">
+                        <img src="${alumni.image}" alt="${alumni.name}" class="alumni-img mb-3">
+                        <h5 class="card-title">${alumni.name}</h5>
+                        <p class="card-text text-muted">${alumni.profession}</p>
+                        <p class="card-text"><small class="text-muted">${alumni.company} • ${alumni.graduationYear}</small></p>
+                        <div class="mb-3">
+                            ${alumni.skills.map(skill => `<span class="badge bg-light text-dark me-1 mb-1">${skill}</span>`).join('')}
+                        </div>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm mt-3 view-profile-btn" data-alumni-id="${alumni.id}">View Profile</button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listener to view profile button
+            col.querySelector('.view-profile-btn').addEventListener('click', function() {
+                viewAlumniProfile(alumni.id);
+            });
+            
+            return col;
+        }
+
+        // Create alumni item for list view
+        function createAlumniListItem(alumni) {
+            const li = document.createElement('div');
+            li.className = 'card mb-3';
+            
+            const branchName = getBranchName(alumni.branch);
+            
+            li.innerHTML = `
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center">
+                            <img src="${alumni.image}" alt="${alumni.name}" class="alumni-img">
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="card-title">${alumni.name}</h5>
+                            <p class="card-text mb-1">${alumni.profession} at ${alumni.company}</p>
+                            <p class="card-text mb-1"><small class="text-muted">${branchName} • ${alumni.graduationYear}</small></p>
+                            <p class="card-text mb-1"><small class="text-muted">${alumni.location}</small></p>
+                            <div class="mt-2">
+                                ${alumni.skills.map(skill => `<span class="badge bg-light text-dark me-1 mb-1">${skill}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <button class="btn btn-outline-primary btn-sm view-profile-btn" data-alumni-id="${alumni.id}">View Profile</button>
+                            <button class="btn btn-outline-secondary btn-sm">Connect</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listener to view profile button
+            li.querySelector('.view-profile-btn').addEventListener('click', function() {
+                viewAlumniProfile(alumni.id);
+            });
+            
+            return li;
+        }
+
+        // View alumni profile
+        function viewAlumniProfile(alumniId) {
+            const alumni = alumniProfiles.find(a => a.id === alumniId);
+            
+            if (!alumni) {
+                showToast('Alumni profile not found', 'error');
+                return;
+            }
+            
+            // Create modal HTML
+            const modalHTML = `
+                <div class="modal fade" id="alumniProfileModal" tabindex="-1" aria-labelledby="alumniProfileModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="alumniProfileModalLabel">${alumni.name}'s Profile</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-center mb-4">
+                                    <img src="${alumni.image}" alt="${alumni.name}" class="profile-img mb-3">
+                                    <h3>${alumni.name}</h3>
+                                    <p class="text-muted">${alumni.profession} at ${alumni.company}</p>
+                                    <span class="badge bg-primary">${getBranchName(alumni.branch)}</span>
+                                    <span class="badge bg-secondary">Class of ${alumni.graduationYear}</span>
+                                </div>
+                                
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <h5>Contact Information</h5>
+                                        <ul class="list-unstyled">
+                                            ${alumni.email ? `<li><i class="fas fa-envelope me-2"></i> ${alumni.email}</li>` : ''}
+                                            ${alumni.phone ? `<li><i class="fas fa-phone me-2"></i> ${alumni.phone}</li>` : ''}
+                                            ${alumni.location ? `<li><i class="fas fa-map-marker-alt me-2"></i> ${alumni.location}</li>` : ''}
+                                            ${alumni.linkedin ? `<li><i class="fab fa-linkedin me-2"></i> <a href="${alumni.linkedin}" target="_blank">LinkedIn Profile</a></li>` : ''}
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Skills</h5>
+                                        <div>
+                                            ${alumni.skills.map(skill => `<span class="badge bg-light text-dark me-1 mb-1">${skill}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                ${alumni.bio ? `
+                                <div class="mb-4">
+                                    <h5>About</h5>
+                                    <p>${alumni.bio}</p>
+                                </div>
+                                ` : ''}
+                                
+                                ${alumni.qualifications && alumni.qualifications.length > 0 ? `
+                                <div class="mb-4">
+                                    <h5>Education & Qualifications</h5>
+                                    ${alumni.qualifications.map(qualification => `
+                                        <div class="qualification-item mb-3">
+                                            <h6 class="mb-1">${qualification.degree}</h6>
+                                            <p class="mb-1">${qualification.institution} • ${qualification.year}</p>
+                                            ${qualification.description ? `<p class="text-muted mb-0">${qualification.description}</p>` : ''}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                ` : ''}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Connect</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Remove existing modal if any
+            const existingModal = document.getElementById('alumniProfileModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            // Add modal to document
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('alumniProfileModal'));
+            modal.show();
+        }
+
+        // Login function
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Simple validation
+            if (!email || !password) {
+                showToast('Please enter both email and password', 'error');
+                return;
+            }
+
+            // Simulate successful login
+            showToast('Login successful! Redirecting...', 'success');
+            
+            // Hide auth container and show main application after a delay
+            setTimeout(() => {
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('mainApplication').style.display = 'block';
+                
+                // Set username in navbar
+                document.getElementById('username').textContent = email.split('@')[0];
+                
+                // Show home page by default
+                showPage('home');
+            }, 1500);
+        }
+
+        // Logout function
+        function logout() {
+            // Show auth container and hide main application
+            document.getElementById('authContainer').style.display = 'flex';
+            document.getElementById('mainApplication').style.display = 'none';
+            
+            // Clear form fields
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+            
+            showToast('You have been logged out', 'info');
+        }
+
+        // Load featured alumni for the home page
+        function loadFeaturedAlumni() {
+            const featuredAlumniContainer = document.getElementById('featuredAlumni');
+            
+            // Get 4 random alumni
+            const featuredAlumni = [...alumniProfiles].sort(() => 0.5 - Math.random()).slice(0, 4);
+            
+            // Clear the container
+            featuredAlumniContainer.innerHTML = '';
+            
+            // Add alumni cards
+            featuredAlumni.forEach(alumni => {
+                const branchClass = alumni.branch;
+                const branchName = getBranchName(alumni.branch);
+                
+                const card = document.createElement('div');
+                card.className = 'col-md-6 col-lg-3 mb-4';
+                card.innerHTML = `
+                    <div class="card alumni-card ${branchClass}">
+                        <span class="branch-badge">${branchName}</span>
+                        <div class="card-body text-center">
+                            <img src="${alumni.image}" alt="${alumni.name}" class="alumni-img mb-3">
+                            <h5 class="card-title">${alumni.name}</h5>
+                            <p class="card-text text-muted">${alumni.profession}</p>
+                            <p class="card-text"><small class="text-muted">${alumni.company} • ${alumni.graduationYear}</small></p>
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fas fa-envelope"></i></a>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm mt-3 connect-btn">Connect</button>
+                        </div>
+                    </div>
+                `;
+                
+                featuredAlumniContainer.appendChild(card);
+            });
+        }
+
+        // Load events for the events page
+        function loadEvents() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            const eventsList = document.getElementById('eventsList');
+            
+            // Clear existing content
+            eventsGrid.innerHTML = '';
+            eventsList.innerHTML = '';
+            
+            // Show loading spinner
+            document.getElementById('eventsLoading').classList.remove('d-none');
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                // Hide loading spinner
+                document.getElementById('eventsLoading').classList.add('d-none');
+                
+                // Add events to grid view
+                eventsData.forEach(event => {
+                    const eventCard = createEventCard(event);
+                    eventsGrid.appendChild(eventCard);
+                });
+                
+                // Add events to list view
+                eventsData.forEach(event => {
+                    const eventItem = createEventListItem(event);
+                    eventsList.appendChild(eventItem);
+                });
+                
+                // Set up event registration buttons
+                document.querySelectorAll('.register-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const eventId = this.getAttribute('data-event-id');
+                        registerForEvent(eventId);
+                    });
+                });
+            }, 1000);
+        }
+
+        // Create an event card for grid view
+        function createEventCard(event) {
+            const col = document.createElement('div');
+            col.className = 'col-md-6 col-lg-4 mb-4';
+            
+            const formattedDate = formatEventDate(event.date);
+            const branchName = getBranchName(event.branch);
+            const registrationPercentage = Math.round((event.registered / event.capacity) * 100);
+            
+            col.innerHTML = `
+                <div class="card event-card h-100">
+                    <span class="event-type-badge event-type-${event.type}">${event.type.charAt(0).toUpperCase() + event.type.slice(1)}</span>
+                    <span class="event-status-badge event-status-${event.status}">${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</span>
+                    <img src="${event.image}" class="card-img-top event-image" alt="${event.title}">
+                    <div class="card-body">
+                        <h5 class="card-title">${event.title}</h5>
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="event-date bg-primary text-white rounded p-2 me-3">
+                                <div class="month">${formattedDate.month}</div>
+                                <div class="day">${formattedDate.day}</div>
+                            </div>
+                            <div>
+                                <p class="mb-0"><i class="fas fa-clock me-2"></i>${formatTime(event.time)}</p>
+                                <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>${event.location}</p>
+                            </div>
+                        </div>
+                        <p class="card-text">${event.description}</p>
+                        <div class="mb-3">
+                            <span class="badge bg-secondary">${branchName}</span>
+                            ${event.price > 0 ? `<span class="badge bg-info">$${event.price}</span>` : `<span class="badge bg-success">Free</span>`}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <small class="text-muted">${event.registered} / ${event.capacity} registered</small>
+                            <small class="text-muted">${registrationPercentage}% full</small>
+                        </div>
+                        <div class="progress event-registration-progress mb-3">
+                            <div class="progress-bar" role="progressbar" style="width: ${registrationPercentage}%" aria-valuenow="${registrationPercentage}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        ${event.status === 'upcoming' ? 
+                            `<button class="btn btn-primary w-100 register-btn" data-event-id="${event.id}">Register Now</button>` : 
+                            `<button class="btn btn-outline-secondary w-100" disabled>Event ${event.status}</button>`
+                        }
+                    </div>
+                </div>
+            `;
+            
+            return col;
+        }
+
+        // Create an event item for list view
+        function createEventListItem(event) {
+            const li = document.createElement('div');
+            li.className = 'card mb-3';
+            
+            const formattedDate = formatEventDate(event.date);
+            const branchName = getBranchName(event.branch);
+            const registrationPercentage = Math.round((event.registered / event.capacity) * 100);
+            
+            li.innerHTML = `
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img src="${event.image}" class="img-fluid rounded" alt="${event.title}">
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="card-title">${event.title}</h5>
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="event-date bg-primary text-white rounded p-2 me-3">
+                                    <div class="month">${formattedDate.month}</div>
+                                    <div class="day">${formattedDate.day}</div>
+                                </div>
+                                <div>
+                                    <p class="mb-0"><i class="fas fa-clock me-2"></i>${formatTime(event.time)}</p>
+                                    <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>${event.location}</p>
+                                </div>
+                            </div>
+                            <p class="card-text">${event.description}</p>
+                            <div class="mb-2">
+                                <span class="badge bg-secondary">${branchName}</span>
+                                <span class="badge event-type-${event.type}">${event.type.charAt(0).toUpperCase() + event.type.slice(1)}</span>
+                                ${event.price > 0 ? `<span class="badge bg-info">$${event.price}</span>` : `<span class="badge bg-success">Free</span>`}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex flex-column h-100 justify-content-between">
+                                <div>
+                                    <span class="badge event-status-${event.status}">${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</span>
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <small class="text-muted">${event.registered} / ${event.capacity} registered</small>
+                                        <small class="text-muted">${registrationPercentage}% full</small>
+                                    </div>
+                                    <div class="progress event-registration-progress mb-3">
+                                        <div class="progress-bar" role="progressbar" style="width: ${registrationPercentage}%" aria-valuenow="${registrationPercentage}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    ${event.status === 'upcoming' ? 
+                                        `<button class="btn btn-primary w-100 register-btn" data-event-id="${event.id}">Register Now</button>` : 
+                                        `<button class="btn btn-outline-secondary w-100" disabled>Event ${event.status}</button>`
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return li;
+        }
+
+        // Register for an event
+        function registerForEvent(eventId) {
+            const event = eventsData.find(e => e.id == eventId);
+            
+            if (event) {
+                if (event.registered < event.capacity) {
+                    // Simulate registration process
+                    showToast(`Successfully registered for ${event.title}`, 'success');
+                    
+                    // Update registration count
+                    event.registered++;
+                    
+                    // Reload events to update the UI
+                    setTimeout(loadEvents, 500);
+                } else {
+                    showToast(`Sorry, ${event.title} is already full`, 'error');
+                }
+            }
+        }
+
+        // Format event date for display
+        function formatEventDate(dateString) {
+            const date = new Date(dateString);
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            return {
+                day: date.getDate(),
+                month: months[date.getMonth()],
+                year: date.getFullYear()
+            };
+        }
+
+        // Format time for display
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            const h = parseInt(hours);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const formattedHours = h % 12 || 12;
+            
+            return `${formattedHours}:${minutes} ${ampm}`;
+        }
+
+        // Get branch name from branch code
+        function getBranchName(branchCode) {
+            const branches = {
+                'civil': 'Civil Engineering',
+                'cse': 'Computer Science',
+                'electrical': 'Electrical Engineering',
+                'mechanical': 'Mechanical Engineering',
+                'business': 'Business Administration',
+                'medical': 'Medical Sciences',
+                'arts': 'Arts & Humanities',
+                'all': 'All Branches',
+                'engineering': 'Engineering'
+            };
+            
+            return branches[branchCode] || branchCode;
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toastContainer = document.querySelector('.toast-container');
+            
+            const toast = document.createElement('div');
+            toast.className = `toast`;
+            
+            // Set border color based on type
+            if (type === 'error') {
+                toast.style.borderLeftColor = '#dc3545';
+            } else if (type === 'success') {
+                toast.style.borderLeftColor = '#28a745';
+            } else if (type === 'warning') {
+                toast.style.borderLeftColor = '#ffc107';
+            } else {
+                toast.style.borderLeftColor = '#17a2b8';
+            }
+            
+            toast.innerHTML = `
+                <div class="toast-body d-flex justify-content-between align-items-center">
+                    <div>${message}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Initialize and show the toast
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            // Remove the toast from DOM after it's hidden
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+    </script>
+</body>
+</html>
