@@ -2583,6 +2583,231 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script>
+// Initial sample alumni data — replace or extend as needed
+let alumniProfiles = [
+    {id: 1, name: "Rajesh Kumar", branch: "cse", profession: "Senior Software Engineer", company: "Google", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"},
+    {id: 2, name: "Priya Sharma", branch: "business", profession: "Product Manager", company: "Microsoft", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"},
+    {id: 3, name: "Amit Patel", branch: "electrical", profession: "Electrical Engineer", company: "Tesla", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"}
+];
+
+// Helper: Returns branch display name
+function getBranchName(code) {
+    const map = {
+        civil: "Civil Engineering",
+        cse: "Computer Science",
+        electrical: "Electrical Engineering",
+        mechanical: "Mechanical Engineering",
+        business: "Business Administration",
+        medical: "Medical Sciences",
+        arts: "Arts & Humanities",
+        all: "All Branches",
+        engineering: "Engineering"
+    };
+    return map[code] || code;
+}
+
+// Renders alumni profiles filtered by branch and profession
+function renderAlumni(branchFilter = "", professionFilter = "") {
+    const container = document.getElementById("alumniGrid");
+    container.innerHTML = "";
+
+    const filtered = alumniProfiles.filter(p => {
+        const branchMatches = !branchFilter || p.branch === branchFilter;
+        const professionMatches = !professionFilter || p.profession.toLowerCase().includes(professionFilter.toLowerCase());
+        return branchMatches && professionMatches;
+    });
+
+    if(filtered.length === 0) {
+        container.innerHTML = `<p class="text-muted">No alumni profiles found for the selected filters.</p>`;
+        return;
+    }
+
+    filtered.forEach(profile => {
+        const card = document.createElement("div");
+        card.className = "col-md-6 col-lg-4 mb-4";
+        card.innerHTML = `
+            <div class="card alumni-card ${profile.branch}">
+                <span class="branch-badge">${getBranchName(profile.branch)}</span>
+                <div class="card-body text-center">
+                    <img src="${profile.image}" alt="${profile.name}" class="alumni-img mb-3" />
+                    <h5 class="card-title">${profile.name}</h5>
+                    <p class="card-text text-muted">${profile.profession}</p>
+                    <p class="card-text"><small class="text-muted">${profile.company}</small></p>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Shows modal to add new alumni profile
+function showAddProfileModal() {
+    if (document.getElementById("addProfileModal")) {
+        new bootstrap.Modal(document.getElementById("addProfileModal")).show();
+        return;
+    }
+
+    const modalHTML = `
+    <div class="modal fade" id="addProfileModal" tabindex="-1" aria-labelledby="addProfileLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form id="addProfileForm">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addProfileLabel">Add Alumni Profile</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3"><label class="form-label">Name</label><input required name="name" type="text" class="form-control" /></div>
+              <div class="mb-3">
+                <label class="form-label">Branch</label>
+                <select required name="branch" class="form-select">
+                  <option value="">Select Branch</option>
+                  <option value="civil">Civil Engineering</option>
+                  <option value="cse">Computer Science</option>
+                  <option value="electrical">Electrical Engineering</option>
+                  <option value="mechanical">Mechanical Engineering</option>
+                  <option value="business">Business Administration</option>
+                  <option value="medical">Medical Sciences</option>
+                  <option value="arts">Arts & Humanities</option>
+                </select>
+              </div>
+              <div class="mb-3"><label class="form-label">Profession</label><input required name="profession" type="text" class="form-control" placeholder="e.g. Software Engineer" /></div>
+              <div class="mb-3"><label class="form-label">Company</label><input required name="company" type="text" class="form-control" /></div>
+              <div class="mb-3"><label class="form-label">Image URL</label><input name="image" type="url" class="form-control" placeholder="Optional" /></div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Add Profile</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    const modal = new bootstrap.Modal(document.getElementById("addProfileModal"));
+    modal.show();
+
+    const form = document.getElementById("addProfileForm");
+    form.addEventListener("submit", e => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        alumniProfiles.push({
+            id: alumniProfiles.length + 1,
+            name: formData.get("name").trim(),
+            branch: formData.get("branch"),
+            profession: formData.get("profession").trim(),
+            company: formData.get("company").trim(),
+            image: formData.get("image")?.trim() || "https://via.placeholder.com/200?text=No+Image"
+        });
+        modal.hide();
+
+        // Trigger re-render using current filter values
+        const branchFilter = document.getElementById("branchFilter")?.value || "";
+        const professionFilter = document.getElementById("professionFilter")?.value.trim() || "";
+        renderAlumni(branchFilter, professionFilter);
+        showToast("Alumni profile added successfully.", "success");
+    });
+}
+
+// Initialize directory page content dynamically
+function loadAlumniDirectory() {
+    const container = document.querySelector("#directory-page .container");
+    if (!container) return;
+
+    // Clean previous dynamic content except header
+    let advancedSearchTools = document.getElementById("advancedSearchTools");
+    if (!advancedSearchTools) {
+        container.insertAdjacentHTML("afterbegin", `
+            <div class="container mb-4" id="advancedSearchTools">
+                <div class="search-box">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Advanced Filters</h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Branch/Department</label>
+                                    <select class="form-select" id="branchFilter">
+                                        <option value="">All Branches</option>
+                                        <option value="civil">Civil Engineering</option>
+                                        <option value="cse">Computer Science</option>
+                                        <option value="electrical">Electrical Engineering</option>
+                                        <option value="mechanical">Mechanical Engineering</option>
+                                        <option value="business">Business Administration</option>
+                                        <option value="medical">Medical Sciences</option>
+                                        <option value="arts">Arts & Humanities</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Profession</label>
+                                    <input type="text" id="professionFilter" class="form-control" placeholder="Search profession..." />
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-sm" id="applyFilters">Apply Filters</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="alumniGrid"></div>
+        `);
+    }
+
+    // Add "Add Profile" button if missing
+    const controls = container.querySelector(".col-md-4.text-md-end");
+    if (controls && !document.getElementById("addProfileBtn")) {
+        const addBtn = document.createElement("button");
+        addBtn.id = "addProfileBtn";
+        addBtn.type = "button";
+        addBtn.className = "btn btn-light";
+        addBtn.innerHTML = '<i class="fas fa-plus"></i> Add Profile';
+        addBtn.addEventListener("click", showAddProfileModal);
+        controls.appendChild(addBtn);
+    }
+
+    // Initial render without filters
+    renderAlumni();
+
+    // Setup filter apply button
+    document.getElementById("applyFilters").onclick = () => {
+        const branch = document.getElementById("branchFilter").value;
+        const profession = document.getElementById("professionFilter").value.trim();
+        renderAlumni(branch, profession);
+    };
+}
+
+// Show toast messages (you may already have this function, else add it)
+function showToast(message, type = "info") {
+    const container = document.querySelector(".toast-container");
+    if (!container) return;
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.style.borderLeftColor = type === "success" ? "#28a745" : (type === "error" ? "#dc3545" : "#17a2b8");
+    toast.innerHTML = `
+        <div class="toast-body d-flex justify-content-between align-items-center">
+            <div>${message}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    `;
+    container.appendChild(toast);
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+    toast.addEventListener("hidden.bs.toast", () => toast.remove());
+}
+
+// Attach load function to directory page navigation event, if applicable
+document.addEventListener("DOMContentLoaded", () => {
+    const dirLink = document.querySelector('[data-page="directory"]');
+    if(dirLink) {
+        dirLink.addEventListener("click", e => {
+            setTimeout(loadAlumniDirectory, 150);
+        });
+    }
+});
+</script>
+
 
 
 </body>
